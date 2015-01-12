@@ -1,0 +1,21 @@
+name: CommandsForSale
+description: 'Allows the purchasing and protecting of commands'
+version: 1.1.2
+author: 'Tecno_Wizard'
+main: me.Tecno_Wizard.CommandsForSale.core.Main
+commands:
+  buycmd:
+    description: Initiates the purchasing of a command
+  confirm:
+    description: Confirms a command purchase
+  deny:
+    description: Denies the purchase of a command
+  cmdstobuy:
+    description: Lists all purchasable commands
+  boughtcmds:
+    description: Lists the commands you have bought
+  cmdsforsale:
+    description: Holds the commands for admin-only functions
+    permission: cmdsforsale.moderator
+    aliases: cfs
+softdepend: [Vault]

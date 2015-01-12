@@ -16,7 +16,7 @@ import java.util.Set;
 public class Resources {
     private static String pluginPrefix;
     private static String currencyPlural;
-    private static HashMap<String, Command> cmds = new HashMap();
+    private static HashMap<String, Command> cmds = new HashMap<>();
     private static ListFile purchaseLog;
 
     Resources(Main main) {
