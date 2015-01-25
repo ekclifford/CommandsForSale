@@ -42,34 +42,37 @@ public class GUIConstructor implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,	String label, String[] args) {
 
-		if(sender instanceof Player){
-			if(args.length == 0) {
-				Inventory inv = this.getFirstInventory((Player) sender);
+		if(sender instanceof Player) {
+			if (!sender.hasPermission("cmdsforsale.buyexempt")) {
+				if (args.length == 0) {
+					Inventory inv = this.getFirstInventory((Player) sender);
 
-				// check to see if inventory is empty
-				boolean isEmpty = true;
-				for (ItemStack item : inv.getContents()) {
-					if (item != null)
-						isEmpty = false;
-				}
-				// if the inv is not empty, send it to the player
-				if (!isEmpty) {
-					((Player) sender).openInventory(getFirstInventory((Player) sender));
+					// check to see if inventory is empty
+					boolean isEmpty = true;
+					for (ItemStack item : inv.getContents()) {
+						if (item != null)
+							isEmpty = false;
+					}
+					// if the inv is not empty, send it to the player
+					if (!isEmpty) {
+						((Player) sender).openInventory(getFirstInventory((Player) sender));
+						return true;
+					}
+					// has all the commands
+					sender.sendMessage(String.format("%s[%s] You have all of the commands you can own right now!", ChatColor.GREEN, pluginPrefix));
 					return true;
+				} else if (args.length == 1) {
+					// arg was given, use non-gui system.
+					BuyCommandController bcc = new BuyCommandController(main);
+					bcc.preformBuyCmd(sender, args, false);
+				} else {
+					// incorrect syntax
+					sender.sendMessage(String.format("%s[%s] Incorrect use. %s/buycmd [Command Name]",
+							ChatColor.RED, pluginPrefix, ChatColor.GOLD));
 				}
-				// has all the commands
-				sender.sendMessage(String.format("%s[%s] You have all of the commands you can own right now!", ChatColor.GREEN, pluginPrefix));
 				return true;
-			} else if (args.length == 1) {
-				// arg was given, use non-gui system.
-				BuyCommandController bcc = new BuyCommandController(main);
-				bcc.preformBuyCmd(sender, args, false);
-			} else {
-				// incorrect syntax
-				sender.sendMessage(String.format("%s[%s] Incorrect use. %s/buycmd [Command Name]",
-						ChatColor.RED, pluginPrefix, ChatColor.GOLD));
 			}
-			return true;
+			sender.sendMessage(String.format("%s[%s] You do not need to buy commands! You are exempt!", ChatColor.GREEN, main.getResources().getPluginPrefix()));
 		}
 		// sender will be console
 		sender.sendMessage(String.format("[%s] Silly console, you have all of the commands!", pluginPrefix));
@@ -182,7 +185,7 @@ public class GUIConstructor implements CommandExecutor{
 			String [] lores = rawLore.split(" ");
 			if(!bought.contains(lores[5].toLowerCase())){
 				String perm = config.getString("CommandOptions."+ lores[5] + ".permission");
-				if (perm.equalsIgnoreCase("void") || player.hasPermission("perm")) {
+				if ((perm.equalsIgnoreCase("void") || player.hasPermission(perm))) {
 					iv.addItem(is);
 					pos++;
 				}

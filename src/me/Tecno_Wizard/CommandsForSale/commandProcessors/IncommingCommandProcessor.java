@@ -25,7 +25,7 @@ public class IncommingCommandProcessor implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onCommandPreprocess(PlayerCommandPreprocessEvent e) {
-		if (!e.getPlayer().hasPermission("cmdsforsale.moderator")) {
+		if (!e.getPlayer().hasPermission("cmdsforsale.buyexempt")) {
 			String command = e.getMessage();
 			command = command.substring(1);
 			String[] args = command.split(" ");

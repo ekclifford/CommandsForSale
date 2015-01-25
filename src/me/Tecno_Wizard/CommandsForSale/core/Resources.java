@@ -47,7 +47,6 @@ public class Resources {
         String rawDate = date.toString();
         rawDate = rawDate.replace(":", ".");
         purchaseLog = new ListFile("plugins/CommandsForSale/PurchaseLogs/" + rawDate, "txt");
-        purchaseLog.addLine("The plugin was started at " + date.toString());
     }
 
     public static void refresh(Main main){

@@ -61,12 +61,13 @@ public class Main extends JavaPlugin {
 		registerListeners();
 		registerCmds();
 		checkForUpdate();
+		resources.logString("The plugin was enabled.");
 	}
 
 	@Override
 	public void onDisable(){
 		Date date = new Date();
-		resources.logString("The plugin was shut down. at " + date.toString());
+		resources.logString("The plugin was shut down at " + date.toString());
 	}
 
 	/**
