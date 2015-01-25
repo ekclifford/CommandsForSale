@@ -37,11 +37,10 @@ public class AddCmdExecutor {
 		}
 	}
 
-	//do i really have to explain this?
 	private boolean checkForValidArguments(CommandSender sender, String[] args) {
 		if (args.length == 2) {
 			// args[0] is addcommand, args[1] is the command name
-			// if there isn't a command already with the name
+			// if there isn't a command already with the
 			if (!main.getConfig().getStringList("AllCommands").contains(args[1].toLowerCase())) {
 				return true;
 			} else {

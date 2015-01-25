@@ -171,9 +171,9 @@ public class GUIConstructor implements CommandExecutor{
 
 	public Inventory getFirstInventory(Player player){
 
-		Inventory iv = Bukkit.createInventory(null, 36, ChatColor.LIGHT_PURPLE + main.getConfig().getString("PluginPrefix"));
+		Inventory iv = Bukkit.createInventory(null, 36, ChatColor.LIGHT_PURPLE + pluginPrefix);
 
-		ListFile file = new ListFile("plugins" + File.separator + "me/Tecno_Wizard/CommandsForSale" + File.separator + "Players"
+		ListFile file = new ListFile("plugins" + File.separator + "CommandsForSale" + File.separator + "Players"
 				+ File.separator + player.getUniqueId().toString(), "txt");
 		ArrayList<String> bought = file.read();
 		int pos = 1;

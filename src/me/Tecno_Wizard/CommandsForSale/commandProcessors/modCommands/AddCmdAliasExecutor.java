@@ -30,23 +30,17 @@ public class AddCmdAliasExecutor
 		}
 	}
 
-	public boolean checkForValidArgs(String[] args, CommandSender sender)
-	{
-		if(args.length == 3)//one for addcmd, one for main command, one for alias
-		{
-			if(main.getConfig().contains("Aliases." + args[1].toLowerCase()))
-			{
-				if(!main.getConfig().getStringList("Aliases." + args[1].toLowerCase()).contains(args[2].toLowerCase()))//if the commands does not already have the alias
-				{
+	public boolean checkForValidArgs(String[] args, CommandSender sender) {
+		//one for addcmd, one for main command, one for alias
+		if(args.length == 3){
+			if(main.getConfig().contains("Aliases." + args[1].toLowerCase())) {
+				//if the commands does not already have the alias
+				if(!main.getConfig().getStringList("Aliases." + args[1].toLowerCase()).contains(args[2].toLowerCase())){
 					return true;
-				}
-				else//if already has alias
-				{
+				} else /*if already has alias*/{
 					sender.sendMessage(String.format("[%s] That is already listed as an alias", pluginPrefix));
 				}
-			}
-			else//if does not contain command
-			{
+			} else/*if does not contain command*/ {
 				sender.sendMessage(String.format("[%s] That command does not exist.", pluginPrefix));
 				return false;
 			}

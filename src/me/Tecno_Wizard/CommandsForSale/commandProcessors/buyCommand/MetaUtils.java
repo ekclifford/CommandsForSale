@@ -18,7 +18,7 @@ public class MetaUtils {
 	public static boolean hasMetadata(Metadatable objectToCheck, String key) {
 		List<MetadataValue> values = objectToCheck.getMetadata(key);
 		for (MetadataValue val : values) {
-			if (val.getOwningPlugin().getDescription().getName().equals("me/Tecno_Wizard/CommandsForSale"))
+			if (val.getOwningPlugin().getDescription().getName().equals("CommandsForSale"))
 				return true;
 		}
 		return false;
@@ -37,7 +37,7 @@ public class MetaUtils {
 		List<MetadataValue> values = objectToCheck.getMetadata(key);
 		for (MetadataValue val : values) {
 			if (val.getOwningPlugin().getDescription().getName()
-					.equals("me/Tecno_Wizard/CommandsForSale"))
+					.equals("CommandsForSale"))
 				return val.asBoolean();
 		}
 		return false;
@@ -57,7 +57,7 @@ public class MetaUtils {
 		List<MetadataValue> values = objectToCheck.getMetadata(key);
 		for (MetadataValue val : values) {
 			if (val.getOwningPlugin().getDescription().getName()
-					.equals("me/Tecno_Wizard/CommandsForSale"))
+					.equals("CommandsForSale"))
 				return val.asString();
 		}
 		return "";

@@ -13,19 +13,17 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class GUIClickListener implements Listener {
 	private Main main;
-	private String pluginPrefix;
 	private BuyCommandController buyCmdCont;
 
 	public GUIClickListener(Main main) {
 		this.main = main;
-		pluginPrefix = main.getResources().getPluginPrefix();
 		buyCmdCont = new BuyCommandController(main);
 	}
 
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent e) {
 		// checks to see if the inventory is the buycommand menu
-		if (ChatColor.stripColor(e.getInventory().getName()).equalsIgnoreCase(pluginPrefix)) {
+		if (ChatColor.stripColor(e.getInventory().getName()).equalsIgnoreCase(main.getResources().getPluginPrefix())) {
 
 			// catch errors that may occur due to the player clicking on things besides buttons
 			try{

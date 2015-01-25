@@ -18,6 +18,7 @@ public class Resources {
     private static String currencyPlural;
     private static HashMap<String, Command> cmds = new HashMap<>();
     private static ListFile purchaseLog;
+    private static List<String> allCmds;
 
     Resources(Main main) {
         FileConfiguration config = main.getConfig();
@@ -37,6 +38,9 @@ public class Resources {
 
             // add cmd
             cmds.put(cmd, new Command(cmd, price, perm, aliases));
+
+            // get all commands
+            allCmds = config.getStringList("AllCommands");
         }
 
         Date date = new Date();
@@ -66,7 +70,7 @@ public class Resources {
             List<String> aliases = config.getStringList("Aliases." + cmd);
 
             // add cmd
-            cmds.put(cmd, new Command(cmd, price, perm, aliases));
+            cmds.put(cmd, new Command(cmd.toLowerCase(), price, perm, aliases));
         }
     }
 

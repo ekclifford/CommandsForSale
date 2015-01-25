@@ -70,6 +70,9 @@ public class Main extends JavaPlugin {
 		setUpConfig();
 		initiateSave();
 		resetResources();
+		registerCmds();
+		/* no call to register listeners, as there will just be duplicates.
+		 Listeners have been adjusted to automatically reflect changes. */
 		checkForUpdate();
 	}
 
@@ -90,7 +93,7 @@ public class Main extends JavaPlugin {
 		getConfig().addDefault("CurrencyPlural", "void");
 		
 		// other values
-		getConfig().addDefault("PluginPrefix", "me/Tecno_Wizard/CommandsForSale");
+		getConfig().addDefault("PluginPrefix", "CommandsForSale");
 		getConfig().addDefault("GUIEnabled", true);
 
 		// adds the MainCommands section of config
@@ -152,9 +155,9 @@ public class Main extends JavaPlugin {
 	public void initiateSave() {
 		ConvertSave.attemptConvert(this);
 
-		save = new DataFile("plugins" + File.separator + "me/Tecno_Wizard/CommandsForSale"
+		save = new DataFile("plugins" + File.separator + "CommandsForSale"
 				+ File.separator + "MainSave", "txt");
-		// if counter for times ran exists/file evisted
+		// if counter for times ran exists/file existed
 		if (!save.contains("NumberOfTimesRan")) {
 
 			// since the plugin has not run before or someone was an idiot and
@@ -185,7 +188,7 @@ public class Main extends JavaPlugin {
 
 	public void checkDirectories() {
 		// player folder
-		File dir = new File("plugins" + File.separator + "me/Tecno_Wizard/CommandsForSale" + File.separator + "Players");
+		File dir = new File("plugins" + File.separator + "CommandsForSale" + File.separator + "Players");
 		if(!dir.exists())
 			dir.mkdir();
 

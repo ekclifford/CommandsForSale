@@ -46,7 +46,7 @@ public class CmdsToBuyExecutor implements CommandExecutor {
 			if (!didNotHaveCommand) {
 				sender.sendMessage(String.format("%s[%s] It looks like you have %saaaaaallllllll the commands!",
 								ChatColor.GREEN,
-								main.getConfig().getString("PluginPrefix"),
+								pluginPrefix,
 								ChatColor.ITALIC));
 			} else {
 				sender.sendMessage(sb.toString());
@@ -55,7 +55,7 @@ public class CmdsToBuyExecutor implements CommandExecutor {
 		// sender is console
 		else {
 			sender.sendMessage(String.format("[%s] You don't need this! You have %saaaaaallllllll the commands!",
-							main.getConfig().getString("PluginPrefix"),
+							pluginPrefix,
 							ChatColor.ITALIC));
 		}
 		return true;
