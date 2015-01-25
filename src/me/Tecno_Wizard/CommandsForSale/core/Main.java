@@ -3,6 +3,7 @@ package me.Tecno_Wizard.CommandsForSale.core;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Logger;
 
 import me.Tecno_Wizard.CommandsForSale.GUI.GUIClickListener;
@@ -60,6 +61,12 @@ public class Main extends JavaPlugin {
 		registerListeners();
 		registerCmds();
 		checkForUpdate();
+	}
+
+	@Override
+	public void onDisable(){
+		Date date = new Date();
+		resources.logString("The plugin was shut down. at " + date.toString());
 	}
 
 	/**

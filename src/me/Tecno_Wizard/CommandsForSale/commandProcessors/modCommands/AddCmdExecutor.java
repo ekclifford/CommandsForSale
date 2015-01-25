@@ -1,5 +1,7 @@
 package me.Tecno_Wizard.CommandsForSale.commandProcessors.modCommands;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.bukkit.ChatColor;
@@ -23,8 +25,9 @@ public class AddCmdExecutor {
 	//called by the Mod command controller
 	public void runCommand(CommandSender sender, String[] args) {
 		if (checkForValidArguments(sender, args)) {
-			Set<String> listWithNewCommand = main.getResources().getCmds();
-			listWithNewCommand.add(args[1].toLowerCase());
+			List<String> listWithNewCommand = new ArrayList<>();
+			listWithNewCommand.addAll(main.getResources().getCmds());
+			listWithNewCommand.add(args[1]);
 			main.getConfig().set("MainCommands", listWithNewCommand);
 			main.saveConfig();
 			main.setUpConfig();//to create options menu for added command

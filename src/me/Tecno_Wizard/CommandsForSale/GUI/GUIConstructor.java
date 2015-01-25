@@ -125,7 +125,6 @@ public class GUIConstructor implements CommandExecutor{
 			buyableCmds.add(icon);
 		}
 
-		if (confirmPage == null) {
 			// create inventory for confirm/deny
 
 			// create icons
@@ -148,7 +147,6 @@ public class GUIConstructor implements CommandExecutor{
 			confirmPage = Bukkit.createInventory(null, 9, ChatColor.DARK_PURPLE + pluginPrefix);
 			confirmPage.setItem(3, confirmIcon);
 			confirmPage.setItem(5, denyIcon);
-		}
 
 		/* if overflow icon is null */
 		if (overflowIcon == null){
@@ -156,7 +154,7 @@ public class GUIConstructor implements CommandExecutor{
 			ItemMeta meta = overflowIconRaw.getItemMeta();
 			meta.setDisplayName(String.format("%sWARNING: OVERFLOW!", ChatColor.RED));
 			// create lore
-			ArrayList<String> lore = new ArrayList<>();
+			lore = new ArrayList<>();
 			lore.add(ChatColor.RED + "There are more commands that are not shown.");
 			lore.add("");
 			lore.add(ChatColor.RED + "If you know what command you want and it is not shown,");
