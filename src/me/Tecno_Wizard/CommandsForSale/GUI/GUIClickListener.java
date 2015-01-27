@@ -78,12 +78,4 @@ public class GUIClickListener implements Listener {
 			} catch (Exception error){}
 		}
 	}
-
-	@EventHandler
-	public void onInventoryDropEvent(InventoryMoveItemEvent e){
-		// checks to see if the inventory is the buycommand menu
-		if (ChatColor.stripColor(e.getDestination().getName()).equalsIgnoreCase(main.getResources().getPluginPrefix())) {
-			e.setCancelled(true);
-		}
-	}
 }

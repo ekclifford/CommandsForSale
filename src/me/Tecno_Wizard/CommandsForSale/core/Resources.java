@@ -1,6 +1,8 @@
 package me.Tecno_Wizard.CommandsForSale.core;
 
 import com.skionz.dataapi.ListFile;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -18,7 +20,17 @@ public class Resources {
     private static String currencyPlural;
     private static HashMap<String, Command> cmds = new HashMap<>();
     private static ListFile purchaseLog;
-    private static List<String> allCmds;
+
+    private boolean displayVerisonInfo;
+    private String versionInformation =
+            ChatColor.AQUA + "[CommandsForSale] Welcome to CommandsForSale Version 1.2!\n" +
+                    "Here's what has been added:\n" +
+                    "Players can now be marked exempt for buying commands using the permission node cmdsforsale.buyexempt\n" +
+                    "This allows you to specify purchase exempt players without giving them moderator abilites\n" +
+                    "GUI's are here! The system should be pretty self explanatory, just type /buycmd instead of /buycmd <Command>\n" +
+                    "Note that specifying the command will still work as it used to. The GUI can be turned off in the config.\n" +
+                    "All purchases are now logged in the plugin's folder. Go and check it out!\n" +
+                    "The next update will feature one time use commands!";
 
     Resources(Main main) {
         FileConfiguration config = main.getConfig();
@@ -40,13 +52,13 @@ public class Resources {
             cmds.put(cmd, new Command(cmd, price, perm, aliases));
 
             // get all commands
-            allCmds = config.getStringList("AllCommands");
         }
 
         Date date = new Date();
         String rawDate = date.toString();
         rawDate = rawDate.replace(":", ".");
         purchaseLog = new ListFile("plugins/CommandsForSale/PurchaseLogs/" + rawDate, "txt");
+        displayVerisonInfo = false;
     }
 
     public static void refresh(Main main){
@@ -96,6 +108,21 @@ public class Resources {
 
     public ListFile getPlayerFile(String UUID){
         return new ListFile("plugins/CommandsForSale/Players/" + UUID, "txt");
+    }
+
+    public String getVersionInformation() {
+        return versionInformation;
+    }
+
+    public boolean displayVerisonInfo() {
+        return displayVerisonInfo;
+    }
+
+    public void setDisplayVerisonInfo(boolean value){
+        displayVerisonInfo = value;
+        if (value){
+            Bukkit.getConsoleSender().sendMessage(versionInformation);
+        }
     }
 
     public void logPurchase(Player sender, String boughtCmd, Double price) {

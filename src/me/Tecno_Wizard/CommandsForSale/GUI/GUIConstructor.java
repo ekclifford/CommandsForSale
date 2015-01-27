@@ -73,6 +73,7 @@ public class GUIConstructor implements CommandExecutor{
 				return true;
 			}
 			sender.sendMessage(String.format("%s[%s] You do not need to buy commands! You are exempt!", ChatColor.GREEN, main.getResources().getPluginPrefix()));
+			return true;
 		}
 		// sender will be console
 		sender.sendMessage(String.format("[%s] Silly console, you have all of the commands!", pluginPrefix));

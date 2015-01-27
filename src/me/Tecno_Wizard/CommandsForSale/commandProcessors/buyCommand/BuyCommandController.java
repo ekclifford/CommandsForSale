@@ -32,19 +32,24 @@ public class BuyCommandController implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		// if sender is a player
 		if (sender instanceof Player) {
-			// the following methods are called in this manner to allow the commands to be called by the GUI
-			if (cmd.getName().equalsIgnoreCase("buycmd")) {
-				this.preformBuyCmd(sender, args, false);
-			}
+			if(!sender.hasPermission("cmdsforsale.buyexempt")){
+				// the following methods are called in this manner to allow the commands to be called by the GUI
+				if (cmd.getName().equalsIgnoreCase("buycmd")) {
+					this.preformBuyCmd(sender, args, false);
+				}
 
-			else if (cmd.getName().equalsIgnoreCase("confirm")) {
-				this.preformConfirm(sender, args);
-			}
+				else if (cmd.getName().equalsIgnoreCase("confirm")) {
+					this.preformConfirm(sender, args);
+				}
 
-			else if (cmd.getName().equalsIgnoreCase("deny")) {
-				this.preformDeny(sender, args);
+				else if (cmd.getName().equalsIgnoreCase("deny")) {
+					this.preformDeny(sender, args);
+				}
+				// handled, close
+				return true;
 			}
-			// handled, close
+			sender.sendMessage(String.format("%s[%s] You do not need to buy commands. You are exempt!",
+					ChatColor.GREEN, main.getResources().getPluginPrefix()));
 			return true;
 		}
 		// sender is console

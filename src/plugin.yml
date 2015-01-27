@@ -19,12 +19,12 @@ commands:
     permission: cmdsforsale.moderator
     aliases: cfs
 permissions:
-  cmdsforsale.moderator
+  cmdsforsale.moderator:
     description: Gives access to all commands and admin functions
     default: false
     children:
-      cmdsforsale.buyexempt
-  cmdsforsale.buyexempt
+      cmdsforsale.buyexempt: true
+  cmdsforsale.buyexempt:
     description: Makes it so the player does not need to buy commands
     default: false
 softdepend: [Vault]

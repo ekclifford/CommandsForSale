@@ -61,6 +61,8 @@ public class Main extends JavaPlugin {
 		registerListeners();
 		registerCmds();
 		checkForUpdate();
+
+		// final operations
 		resources.logString("The plugin was enabled.");
 	}
 
@@ -167,7 +169,6 @@ public class Main extends JavaPlugin {
 				+ File.separator + "MainSave", "txt");
 		// if counter for times ran exists/file existed
 		if (!save.contains("NumberOfTimesRan")) {
-
 			// since the plugin has not run before or someone was an idiot and
 			// corrupted their save file, we shall attack with characters
 			log.info("[CommandsForSale] Welcome to CommandsForSale!\n"
@@ -177,14 +178,21 @@ public class Main extends JavaPlugin {
 					+ "form under the config section! Just Google bukkit commandsforsale or search for it in BukkitDev\n"
 					+ "[CommandsForSale] ENJOY IT!");
 			save.set("NumberOfTimesRan", 1);
+			save.set("V1.2HasRan", false);
 			save.save();
 
-		}// if counter did not exist
-		else {
+		} else {
 			int newTimesRan = save.getInt("NumberOfTimesRan") + 1;
 			save.set("NumberOfTimesRan", newTimesRan);
 			save.save();
 		}
+
+		Boolean hasRunVersion = save.getBoolean("V1.2HasRan");
+		if(hasRunVersion == null)
+			hasRunVersion = false;
+		resources.setDisplayVerisonInfo(!hasRunVersion);
+		save.set("V1.2HasRan", true);
+
 		// feedback message (I like feedback)
 		if (save.getInt("NumberOfTimesRan") == 5
 				|| save.getInt("NumberOfTimesRan") == 10) {
@@ -192,18 +200,17 @@ public class Main extends JavaPlugin {
 					+ "[CommandsForSale] Use this link: http://goo.gl/forms/kCB7H2LNZw\n"
 					+ "[CommandsForSale] This message will appear at 5 and 10 runs of the plugin, and never again.");
 		}
+		save.save();
 	}
 
 	public void checkDirectories() {
 		// player folder
-		File dir = new File("plugins" + File.separator + "CommandsForSale" + File.separator + "Players");
-		if(!dir.exists())
-			dir.mkdir();
+		File dir = new File("plugins/CommandsForSale/PurchaseLogs");
+		dir.mkdir();
 
 		// log folder
-		dir = new File("plugins/CommandsForSale/PurchaseLogs");
-		if(!dir.exists())
-			dir.mkdir();
+		dir = new File("plugins/CommandsForSale/Players");
+		dir.mkdir();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////
