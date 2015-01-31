@@ -21,10 +21,8 @@ commands:
 permissions:
   cmdsforsale.moderator:
     description: Gives access to all commands and admin functions
-    default: false
     children:
       cmdsforsale.buyexempt: true
   cmdsforsale.buyexempt:
     description: Makes it so the player does not need to buy commands
-    default: false
 softdepend: [Vault]
