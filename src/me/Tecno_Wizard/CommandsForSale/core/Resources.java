@@ -30,7 +30,12 @@ public class Resources {
                     "GUI's are here! The system should be pretty self explanatory, just type /buycmd instead of /buycmd <Command>\n" +
                     "Note that specifying the command will still work as it used to. The GUI can be turned off in the config.\n" +
                     "All purchases are now logged in the plugin's folder. Go and check it out!\n" +
-                    "The next update will feature one time use commands!";
+                    "The next update will feature one time use commands!\n" +
+                    ChatColor.RED + "WARNING WARNING WARNING WARNING WARNING:\n" +
+                    "YOU MAY NEED TO DELETE THE OLD COMMANDSFORSALE FILE if the auto-updater updated the plugin!\n" +
+                    "Due to a bug with the updater, the old file may not be deleted!\n" +
+                    "PLEASE DELETE THE FILE MANUALLY IF NECESSARY!\n" +
+                    ChatColor.GOLD + "Thank you for your patience!";
 
     Resources(Main main) {
         FileConfiguration config = main.getConfig();

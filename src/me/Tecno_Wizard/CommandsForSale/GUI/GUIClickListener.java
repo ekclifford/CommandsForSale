@@ -27,6 +27,9 @@ public class GUIClickListener implements Listener {
 		// checks to see if the inventory is the buycommand menu
 		if (ChatColor.stripColor(e.getInventory().getName()).equalsIgnoreCase(main.getResources().getPluginPrefix())) {
 
+			// cancel the event
+			e.setCancelled(true);
+
 			// catch errors that may occur due to the player clicking on things besides buttons
 			try{
 				// checks to see if the item has metadata (is one of the buttons)
@@ -34,9 +37,6 @@ public class GUIClickListener implements Listener {
 
 					// now see what button was clicked
 					ItemMeta meta = e.getCurrentItem().getItemMeta();
-
-					// cancel the event
-					e.setCancelled(true);
 					
 					// get the player. This cast is safe because nothing other than a player can open it.
 					Player player = (Player) e.getWhoClicked();
