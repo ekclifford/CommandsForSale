@@ -35,8 +35,9 @@ public class IncommingCommandProcessor implements Listener {
 				ArrayList<String> purchased = main.getResources().getPlayerFile(e.getPlayer()).read();
 				// if the player has not purchased the command
 				if (!purchased.contains(args[0])) {
-					e.getPlayer().sendMessage(
-							String.format("%s[%s] %s%s %sor its main command " + "such as /balance to /bal must be purchased before it can be used.",
+                            e.getPlayer().sendMessage(
+							String.format("%s[%s] %s%s %sor its main command such as /balance to /bal must be purchased before it can be used.\n" +
+                                            "Use /buyonce <Command Name> to use it once, if it is unlocked to do so. ",
 									ChatColor.RED, main.getResources().getPluginPrefix(), ChatColor.GOLD,
 									args[0],ChatColor.RED));
 					e.setCancelled(true);

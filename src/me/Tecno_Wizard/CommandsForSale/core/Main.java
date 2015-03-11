@@ -132,6 +132,8 @@ public class Main extends JavaPlugin {
 		// controls and generates the command options section
 		for (String commandName : getConfig().getStringList("MainCommands")) {
 			getConfig().addDefault("CommandOptions." + commandName + ".price", 0);
+            getConfig().addDefault("CommandOptions." + commandName + ".canBeOneTimeUsed", true);
+            getConfig().addDefault("CommandOptions." + commandName + ".oneTimeUsePrice", 0);
 			getConfig().addDefault("CommandOptions." + commandName + ".permission", "void");
 		}
 		// save again
