@@ -30,14 +30,14 @@ public class BuyCommandExecutor {
 		System.out.println(MetaUtils.getMetadataValueAsString(sender, META_KEY_CMD));
 		if(!MetaUtils.hasMetadata(sender, META_KEY_CMD)) {
 			if(main.getResources().getCmds().contains(args[0].toLowerCase())) {
-				ListFile file = main.getResources().getPlayerFile(sender.getUniqueId().toString());
+				ListFile file = main.getResources().getPlayerPermanentFile(sender.getUniqueId().toString());
 				//read player file to see if has command
 				if(!file.read().contains(args[0]))
 				{
 					String perm = main.getResources().getCommand(args[0]).getPermission();
 					if (!main.getResources().getCommand(args[0].toLowerCase()).needsPerm() || sender.hasPermission(perm)) {
 							// purchase process
-							Double price = main.getResources().getCommand(args[0]).getPrice();//gets the price of the command
+							Double price = main.getResources().getCommand(args[0]).getPermanentPrice();//gets the price of the command
 							//if the user has enough money to buy the command
 							if (econ.getBalance(sender) >= price){
 								// is ready, check to see if GUI

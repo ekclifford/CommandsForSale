@@ -1,12 +1,15 @@
-package me.Tecno_Wizard.CommandsForSale.commandProcessors.buyCommand;
+package me.Tecno_Wizard.CommandsForSale.commandProcessors.buyCommand.BuyCommandOnce;
 
+import com.skionz.dataapi.DataFile;
 import me.Tecno_Wizard.CommandsForSale.core.Main;
 import me.Tecno_Wizard.CommandsForSale.core.Resources;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import static org.bukkit.ChatColor.*;
 
@@ -28,12 +31,17 @@ public class BuyOnceExecutor implements CommandExecutor{
             if(args.length == 2) {
                 if(args[1].equalsIgnoreCase("price")){
                     // checking price of arg 1
-                    if(main.getResources().getCommand(args[1].toLowerCase()) != null){
-                        //TODO check for price, if can be one time bought
-                    } else {
-                        Resources.sendMessage("Error, " + args[1].toLowerCase() + " is not seen as a command." +
-                                "\n make sure that you are using the MAIN command, not an alias.", sender, ChatColor.RED);
-                        return true;
+                    BuyOnceAnalyzer boa = new BuyOnceAnalyzer(main);
+                    switch(boa.checkPrice(main.getResources().getCommand(args[1].toLowerCase()), sender)){
+                        case CONFIRM:
+                            EconomyResponse response =
+                                    Main.econ.withdrawPlayer((Player)sender, main.getResources().getCommand(args[1].toLowerCase()).getSinglePrice());
+                            if(response.transactionSuccess()){
+                                Resources.sendMessage("You bought one pass!", sender, ChatColor.GREEN);
+                                DataFile playerFile = main.getResources().getPlayerFile((Player)sender);
+                            } else {
+                                Resources.sendMessage("An error occured. Please try again later.", sender, ChatColor.DARK_RED);
+                            }
                     }
                 }
                 sender.sendMessage("Command ");

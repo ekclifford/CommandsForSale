@@ -189,11 +189,11 @@ public class Main extends JavaPlugin {
 			save.save();
 		}
 
-		Boolean hasRunVersion = save.getBoolean("V1.2HasRan");
+		Boolean hasRunVersion = save.getBoolean("V1.2.1HasRan");
 		if(hasRunVersion == null)
 			hasRunVersion = false;
 		resources.setDisplayVerisonInfo(!hasRunVersion);
-		save.set("V1.2HasRan", true);
+		save.set("V1.2.1HasRan", true);
 
 		// feedback message (I like feedback)
 		if (save.getInt("NumberOfTimesRan") == 5
@@ -206,13 +206,17 @@ public class Main extends JavaPlugin {
 	}
 
 	public void checkDirectories() {
-		// player folder
-		File dir = new File("plugins/CommandsForSale/PurchaseLogs");
-		dir.mkdir();
+        // log folder
+		File dir = new File("plugins/CommandsForSale/PurchaseLogs/");
+		dir.mkdirs();
 
-		// log folder
-		dir = new File("plugins/CommandsForSale/Players");
-		dir.mkdir();
+		// player permanent folder
+		dir = new File("plugins/CommandsForSale/Players/");
+		dir.mkdirs();
+
+        // player pass folder
+        dir = new File("plugins/CommandsForSale/PlayerPasses/");
+        dir.mkdirs();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////

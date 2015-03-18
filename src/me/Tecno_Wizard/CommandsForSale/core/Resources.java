@@ -1,5 +1,6 @@
 package me.Tecno_Wizard.CommandsForSale.core;
 
+import com.skionz.dataapi.DataFile;
 import com.skionz.dataapi.ListFile;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -107,8 +108,16 @@ public class Resources {
         return new ListFile("plugins/CommandsForSale/Players/" + player.getUniqueId(), "txt");
     }
 
-    public ListFile getPlayerFile(String UUID){
+    public ListFile getPlayerPermanentFile(String UUID){
         return new ListFile("plugins/CommandsForSale/Players/" + UUID, "txt");
+    }
+
+    public DataFile getPlayerPassFile(String UUID){
+        return new DataFile("plugins/CommandsForSale/PlayerPasses/" + UUID, "txt");
+    }
+
+    public DataFile getPlayerPassFile(Player player){
+        return this.getPlayerPassFile(player.getUniqueId().toString());
     }
 
     public String getVersionInformation() {
