@@ -31,9 +31,9 @@ public class BuyOnceExecutor implements CommandExecutor{
                 switch (boa.attemptBuy(main.getResources().getCommand(args[0].toLowerCase()), sender)) {
                     case CONFIRM:
                         EconomyResponse response =
-                                Main.econ.withdrawPlayer((Player) sender, main.getResources().getCommand(args[1].toLowerCase()).getSinglePrice());
+                                Main.econ.withdrawPlayer((Player) sender, main.getResources().getCommand(args[0].toLowerCase()).getSinglePrice());
                         if (response.transactionSuccess()) {
-                            givePass(args[1].toLowerCase(), sender);
+                            givePass(args[0].toLowerCase(), sender);
                         } else {
                             Resources.sendMessage("An error occurred. Please try again later.", sender, ChatColor.DARK_RED);
                         }
@@ -51,17 +51,16 @@ public class BuyOnceExecutor implements CommandExecutor{
                         Resources.sendMessage("You do not have the necessary permissions to buy this", sender, ChatColor.RED);
                         break;
                     default:
-                        Resources.sendMessage("An unexpected error occured. Try again later.", sender, ChatColor.RED);
+                        Resources.sendMessage("An unexpected error occurred. Try again later.", sender, ChatColor.RED);
                         break;
                 }
                 return true;
             } else if (args.length == 2) { // is price lenght
                 if (args[1].equalsIgnoreCase("price")) {
                     BuyOnceAnalyzer boa = new BuyOnceAnalyzer(main);
-                    switch (boa.checkPrice(main.getResources().getCommand(args[1].toLowerCase()), sender)) {
+                    switch (boa.checkPrice(main.getResources().getCommand(args[0].toLowerCase()), sender)) {
+                        //confirm done in analyzer
                         case CONFIRM:
-                            Double price = main.getResources().getCommand(args[0].toLowerCase()).getSinglePrice();
-                            Resources.sendMessage("The price of that command is " + price + " " + main.getResources().getPluginPrefix(), sender, ChatColor.AQUA);
                             break;
                         case DENY_CMD_DOES_NOT_EXIST:
                             Resources.sendMessage("That command isn't recognized. Make sure you are using the main command", sender, ChatColor.RED);
@@ -70,10 +69,8 @@ public class BuyOnceExecutor implements CommandExecutor{
                             Resources.sendMessage("You can't buy a 1 time pass for that command", sender, ChatColor.RED);
                             break;
                         default:
-                            return true;
+                            Resources.sendMessage("An unexpected error occurred. Please try again later and contact an admin.", sender, ChatColor.RED);
                     }
-                    Resources.sendMessage("Invalid arguments. For price check, use " + ChatColor.GOLD + "/buyonce <Command> price",
-                            sender, ChatColor.RED);
                     return true;
                 } else {
                     //invalid args
@@ -82,9 +79,10 @@ public class BuyOnceExecutor implements CommandExecutor{
                     return true;
                 }
             }
-            if (args.length > 2) {
+            else {
                 // invalid arguments
-                Resources.sendMessage("Invalid arguments. For price check, use " + ChatColor.GOLD + "/buyonce <Command> price",
+                Resources.sendMessage("Invalid arguments. For price check, use " + ChatColor.GOLD + "/buyonce <Command> price\n" +
+                                ChatColor.RED + "For buying, use " + ChatColor.GOLD + "/buyonce <Command>",
                         sender, ChatColor.RED);
             }
             return true;
@@ -92,18 +90,15 @@ public class BuyOnceExecutor implements CommandExecutor{
         return true;
     }
 
-
-
     private void givePass(String cmd, CommandSender sender) {
         Resources.sendMessage("You bought one pass!", sender, ChatColor.GREEN);
         ((Player) sender).playSound(((Player) sender).getLocation(),
                 Sound.CHICKEN_EGG_POP, 1, 5);
         DataFile playerFile = main.getResources().getPlayerPassFile((Player)sender);
-        if(playerFile.getInt(cmd) == null){
+        if(!playerFile.isInt(cmd)){
             playerFile.set(cmd, 0);
         }
         playerFile.set(cmd, playerFile.getInt(cmd) + 1);
+        playerFile.save();
     }
-
-
 }

@@ -27,7 +27,9 @@ public class Resources {
     private String versionInformation =
             ChatColor.AQUA + "[CommandsForSale] Welcome to CommandsForSale Version 1.2.1!\n" +
                     "Here's what has been added:\n" +
-                    "One time use commands!\n" +
+                    "One time use commands! /buyonce <cmd> buys a 1 time pass which will be used on the next call of the command\n" +
+                    "\n /buyonce <cmd> price    will print out the price of the command.\n" +
+                    "Please note that this is not yet set up with the gui and I apologize for that, but I wanted to get this update out." +
                     ChatColor.RED + "SET THE PRICE OF ONE TIME COMMANDS! IT'S DEFAULT IS 0";
 
     Resources(Main main) {

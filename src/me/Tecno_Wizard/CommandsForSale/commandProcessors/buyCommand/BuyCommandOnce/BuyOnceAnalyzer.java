@@ -46,8 +46,8 @@ public class BuyOnceAnalyzer{
             case 1:
                 return BuyCommandResponse.DENY_CANNOT_BE_BOUGHT;
             case 2:
-                if(sender.hasPermission(cmd.getPermission())){
-                    if(Main.econ.getBalance((Player)sender) >= cmd.getSinglePrice()){
+                if(cmd.getPermission() == null || sender.hasPermission(cmd.getPermission())) {
+                    if (Main.econ.getBalance((Player) sender) >= cmd.getSinglePrice()) {
                         return BuyCommandResponse.CONFIRM;
                     }
                     return BuyCommandResponse.DENY_FUNDS;

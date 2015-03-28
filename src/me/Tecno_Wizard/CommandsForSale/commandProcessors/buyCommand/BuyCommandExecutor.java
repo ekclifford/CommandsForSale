@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import com.skionz.dataapi.ListFile;
 
 /**
- * Handels the execution of /buycmd
+ * Handels the execution of /buycmd to the controller
  * @author Ethan
  *
  */
@@ -31,7 +31,7 @@ public class BuyCommandExecutor {
 		if(!MetaUtils.hasMetadata(sender, META_KEY_CMD)) {
 			if(main.getResources().getCmds().contains(args[0].toLowerCase())) {
 				ListFile file = main.getResources().getPlayerPermanentFile(sender.getUniqueId().toString());
-				//read player file to see if has command
+				//read player file to see if has cmd
 				if(!file.read().contains(args[0]))
 				{
 					String perm = main.getResources().getCommand(args[0]).getPermission();

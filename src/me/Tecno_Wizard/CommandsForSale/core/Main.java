@@ -181,7 +181,7 @@ public class Main extends JavaPlugin {
 					+ "form under the config section! Just Google bukkit commandsforsale or search for it in BukkitDev\n"
 					+ "[CommandsForSale] ENJOY IT!");
 			save.set("NumberOfTimesRan", 1);
-			save.set("V1.2HasRan", false);
+			save.set("V1.2.1HasRan", false);
 			save.save();
 
 		} else {
@@ -274,16 +274,7 @@ public class Main extends JavaPlugin {
 
 		boolean didMetricsLoad = pm.start();
 
-		if (didMetricsLoad) {
-			Metrics.Graph previousTimesRan = pm.createGraph("PreviousTimesRan");
-			previousTimesRan.addPlotter(new Metrics.Plotter() {
-				@Override
-				// returns data for McStats on # of times the plugin was ran
-				public int getValue() {
-					return save.getInt("NumberOfTimesRan");
-				}
-			});
-		} else {
+		if (!didMetricsLoad) {
 			log.info(String.format("[%s] Plugin metrics is disabled. This will not affect the performance of CommandsForSale.",
 							getConfig().getString("PluginPrefix")));
 		}
