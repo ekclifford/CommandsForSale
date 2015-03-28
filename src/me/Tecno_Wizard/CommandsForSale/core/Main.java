@@ -10,6 +10,7 @@ import me.Tecno_Wizard.CommandsForSale.GUI.GUIClickListener;
 import me.Tecno_Wizard.CommandsForSale.GUI.GUIConstructor;
 import me.Tecno_Wizard.CommandsForSale.commandProcessors.BoughtCmdsExecutor;
 import me.Tecno_Wizard.CommandsForSale.commandProcessors.CmdsToBuyExecutor;
+import me.Tecno_Wizard.CommandsForSale.commandProcessors.buyCommand.BuyCommandOnce.BuyOnceExecutor;
 import me.Tecno_Wizard.CommandsForSale.commandProcessors.modCommands.ModCommandsController;
 import me.Tecno_Wizard.CommandsForSale.saveConvertSystems.ConvertSave;
 import me.Tecno_Wizard.CommandsForSale.updateWarning.ModUpdateWarner;
@@ -132,6 +133,8 @@ public class Main extends JavaPlugin {
 		// controls and generates the command options section
 		for (String commandName : getConfig().getStringList("MainCommands")) {
 			getConfig().addDefault("CommandOptions." + commandName + ".price", 0);
+            getConfig().addDefault("CommandOptions." + commandName + ".canBeOneTimeUsed", true);
+            getConfig().addDefault("CommandOptions." + commandName + ".oneTimeUsePrice", 0);
 			getConfig().addDefault("CommandOptions." + commandName + ".permission", "void");
 		}
 		// save again
@@ -178,7 +181,7 @@ public class Main extends JavaPlugin {
 					+ "form under the config section! Just Google bukkit commandsforsale or search for it in BukkitDev\n"
 					+ "[CommandsForSale] ENJOY IT!");
 			save.set("NumberOfTimesRan", 1);
-			save.set("V1.2HasRan", false);
+			save.set("V1.2.1HasRan", false);
 			save.save();
 
 		} else {
@@ -187,11 +190,11 @@ public class Main extends JavaPlugin {
 			save.save();
 		}
 
-		Boolean hasRunVersion = save.getBoolean("V1.2HasRan");
+		Boolean hasRunVersion = save.getBoolean("V1.2.1HasRan");
 		if(hasRunVersion == null)
 			hasRunVersion = false;
 		resources.setDisplayVerisonInfo(!hasRunVersion);
-		save.set("V1.2HasRan", true);
+		save.set("V1.2.1HasRan", true);
 
 		// feedback message (I like feedback)
 		if (save.getInt("NumberOfTimesRan") == 5
@@ -204,13 +207,17 @@ public class Main extends JavaPlugin {
 	}
 
 	public void checkDirectories() {
-		// player folder
+        // log folder
 		File dir = new File("plugins/CommandsForSale/PurchaseLogs");
-		dir.mkdir();
+		dir.mkdirs();
 
-		// log folder
+		// player permanent folder
 		dir = new File("plugins/CommandsForSale/Players");
-		dir.mkdir();
+		dir.mkdirs();
+
+        // player pass folder
+        dir = new File("plugins/CommandsForSale/PlayerPasses");
+        dir.mkdirs();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////
@@ -230,6 +237,7 @@ public class Main extends JavaPlugin {
 		getCommand("cmdsforsale").setExecutor(new ModCommandsController(this));
 		getCommand("cmdstobuy").setExecutor(new CmdsToBuyExecutor(this));
 		getCommand("boughtcmds").setExecutor(new BoughtCmdsExecutor(this));
+
 	}
 
 	// used for organizational reasons, delegates objects to use based on
@@ -244,12 +252,13 @@ public class Main extends JavaPlugin {
 			}
 			getCommand("confirm").setExecutor(bce);
 			getCommand("deny").setExecutor(bce);
+            getCommand("buyonce").setExecutor(new BuyOnceExecutor(this));
 		} else {
-			VaultFailedBuyCmdsExecutor vce = new VaultFailedBuyCmdsExecutor(
-					this);
+			VaultFailedBuyCmdsExecutor vce = new VaultFailedBuyCmdsExecutor(this);
 			getCommand("buycmd").setExecutor(vce);
 			getCommand("confirm").setExecutor(vce);
 			getCommand("deny").setExecutor(vce);
+            getCommand("buyonce").setExecutor(vce);
 		}
 	}
 
@@ -265,16 +274,7 @@ public class Main extends JavaPlugin {
 
 		boolean didMetricsLoad = pm.start();
 
-		if (didMetricsLoad) {
-			Metrics.Graph previousTimesRan = pm.createGraph("PreviousTimesRan");
-			previousTimesRan.addPlotter(new Metrics.Plotter() {
-				@Override
-				// returns data for McStats on # of times the plugin was ran
-				public int getValue() {
-					return save.getInt("NumberOfTimesRan");
-				}
-			});
-		} else {
+		if (!didMetricsLoad) {
 			log.info(String.format("[%s] Plugin metrics is disabled. This will not affect the performance of CommandsForSale.",
 							getConfig().getString("PluginPrefix")));
 		}

@@ -1,6 +1,6 @@
 name: CommandsForSale
 description: 'Allows the purchasing and protecting of commands'
-version: 1.2
+version: 1.2.1
 author: 'Tecno_Wizard'
 main: me.Tecno_Wizard.CommandsForSale.core.Main
 commands:
@@ -18,6 +18,8 @@ commands:
     description: Holds the commands for admin-only functions
     permission: cmdsforsale.moderator
     aliases: cfs
+  buyonce:
+    description: Buys one time use pass with argument of cmd name. If second arg is price, prints price.
 permissions:
   cmdsforsale.moderator:
     description: Gives access to all commands and admin functions
