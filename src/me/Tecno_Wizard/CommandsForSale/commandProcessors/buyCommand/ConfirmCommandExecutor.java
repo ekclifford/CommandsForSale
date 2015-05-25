@@ -44,7 +44,7 @@ public class ConfirmCommandExecutor {
 						file.addLine(alis.toLowerCase());
 					}
 					//add the purchase to the log
-					main.getResources().logPurchase(sender, toBuy, price);
+					main.getResources().logPermanentPurchase(sender, toBuy, price);
 					return ConfirmationResponse.CONFIRM_READY;
 				}
 				//if transaction failed

@@ -18,14 +18,17 @@ public class Command {
     private List<String> aliases;
     // can be one time used
     private boolean canBeOneTimeUsed;
+    // material representation
+    private String material;
 
-    public Command(String cmdName, double permPrice, double singlePrice, String perm, boolean oneTimeuse, List<String> aliases) {
+    public Command(String cmdName, double permPrice, double singlePrice, String perm, boolean oneTimeuse, List<String> aliases, String material) {
         this.cmdName = cmdName;
         this.permPrice = permPrice;
         this.singlePrice = singlePrice;
         this.perm = perm;
         this.aliases = aliases;
         this.canBeOneTimeUsed = oneTimeuse;
+        this.material = material;
     }
 
     public String getCommandName() {
@@ -55,5 +58,9 @@ public class Command {
 
     public boolean canBeOneTimeUsed(){
         return canBeOneTimeUsed;
+    }
+
+    public String getMaterial() {
+        return material;
     }
 }

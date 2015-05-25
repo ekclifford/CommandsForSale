@@ -2,6 +2,7 @@ package me.Tecno_Wizard.CommandsForSale.core;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -61,13 +62,14 @@ public class Main extends JavaPlugin {
 		startPluginMetrics();
 		registerListeners();
 		registerCmds();
+        writeReadMeFiles();
 		checkForUpdate();
 
 		// final operations
 		resources.logString("The plugin was enabled.");
 	}
 
-	@Override
+    @Override
 	public void onDisable(){
 		Date date = new Date();
 		resources.logString("The plugin was shut down at " + date.toString());
@@ -136,6 +138,7 @@ public class Main extends JavaPlugin {
             getConfig().addDefault("CommandOptions." + commandName + ".canBeOneTimeUsed", true);
             getConfig().addDefault("CommandOptions." + commandName + ".oneTimeUsePrice", 0);
 			getConfig().addDefault("CommandOptions." + commandName + ".permission", "void");
+            getConfig().addDefault("CommandOptions." + commandName + ".GUIIcon", "WEB");
 		}
 		// save again
 		getConfig().options().copyDefaults(true);
@@ -190,11 +193,11 @@ public class Main extends JavaPlugin {
 			save.save();
 		}
 
-		Boolean hasRunVersion = save.getBoolean("V1.2.1HasRan");
+		Boolean hasRunVersion = save.getBoolean("V1.2.2HasRan");
 		if(hasRunVersion == null)
 			hasRunVersion = false;
 		resources.setDisplayVerisonInfo(!hasRunVersion);
-		save.set("V1.2.1HasRan", true);
+		save.set("V1.2.2HasRan", true);
 
 		// feedback message (I like feedback)
 		if (save.getInt("NumberOfTimesRan") == 5
@@ -320,6 +323,10 @@ public class Main extends JavaPlugin {
 		} else
 			updater = null;
 	}
+
+    private void writeReadMeFiles(){
+        saveResource("MaterialList.txt", true);
+    }
 
 	public static Updater getUpdater() {
 		return updater;

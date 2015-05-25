@@ -25,13 +25,10 @@ public class Resources {
 
     private boolean displayVerisonInfo;
     private String versionInformation =
-            ChatColor.AQUA + "[CommandsForSale] Welcome to CommandsForSale Version 1.2.1!\n" +
-                    "Here's what has been added:\n" +
-                    "One time use commands! /buyonce <cmd> buys a 1 time pass which will be used on the next call of the command\n" +
-                    "\n /buyonce <cmd> price    will print out the price of the command.\n" +
-                    "Please note that this is not yet set up with the gui and I apologize for that, but I wanted to get this update out." +
-                    ChatColor.RED + "SET THE PRICE OF ONE TIME COMMANDS! IT'S DEFAULT IS 0";
-
+            ChatColor.AQUA + "[CommandsForSale] Welcome to CommandsForSale Version 1.2.2!\n" +
+                    "Added custom materials for commands in the GUI. " +
+                    ChatColor.RED + "Set the material for each command. The list has been pasted in the plugin folder. " +
+                    "THESE ARE CASE SENSITIVE.";
     Resources(Main main) {
         FileConfiguration config = main.getConfig();
         currencyPlural = config.getString("CurrencyPlural");
@@ -43,7 +40,7 @@ public class Resources {
             double oneTimePrice = config.getDouble("CommandOptions." + cmd.toLowerCase() + ".oneTimeUsePrice");
             String perm = config.getString("CommandOptions." + cmd.toLowerCase() + ".permission");
             boolean canBeOneTimeUsed = config.getBoolean("CommandOptions." + cmd.toLowerCase() + ".canBeOneTimeUsed");
-
+            String material = config.getString("CommandOptions." + cmd.toLowerCase() + ".GUIIcon");
             // set perm to null if void
             if (perm.equalsIgnoreCase("void"))
                 perm = null;
@@ -51,7 +48,7 @@ public class Resources {
             List<String> aliases = config.getStringList("Aliases." + cmd);
 
             // add cmd
-            cmds.put(cmd, new Command(cmd, permPrice, oneTimePrice, perm, canBeOneTimeUsed, aliases));
+            cmds.put(cmd, new Command(cmd, permPrice, oneTimePrice, perm, canBeOneTimeUsed, aliases, material));
 
             // get all commands
         }
@@ -78,6 +75,7 @@ public class Resources {
             double oneTimePrice = config.getDouble("CommandOptions." + cmd.toLowerCase() + ".oneTimeUsePrice");
             String perm = config.getString("CommandOptions." + cmd.toLowerCase() + ".permission");
             boolean canBeOneTimeUsed = config.getBoolean("CommandOptions." + cmd.toLowerCase() + ".canBeOneTimeUsed");
+            String material = config.getString("CommandOptions." + cmd.toLowerCase() + ".GUIIcon");
 
             // set perm to null if void
             if (perm.equalsIgnoreCase("void"))
@@ -86,7 +84,7 @@ public class Resources {
             List<String> aliases = config.getStringList("Aliases." + cmd);
 
             // add cmd
-            cmds.put(cmd, new Command(cmd.toLowerCase(), price, oneTimePrice, perm, canBeOneTimeUsed, aliases));
+            cmds.put(cmd, new Command(cmd.toLowerCase(), price, oneTimePrice, perm, canBeOneTimeUsed, aliases, material));
         }
     }
 
@@ -137,12 +135,21 @@ public class Resources {
         }
     }
 
-    public void logPurchase(Player sender, String boughtCmd, Double price) {
+    public void logPermanentPurchase(Player sender, String boughtCmd, Double price) {
         Date date = new Date();
         String timeStamp = date.toString();
 
         // true format (Ex) "[Mon May 04 09:51:52 CDT 2009] Tecno_Wizard||a090200e-42f4-49da-8426-44a2010a8483 bought the command test for 20.0 dollars
         purchaseLog.addLine(String.format("[%s] %s||%s bought the command %s for %s %s",
+                timeStamp, sender.getName(), sender.getUniqueId(), boughtCmd, price.toString(), getCurrencyPlural()));
+    }
+
+
+    public void logPassPurchase(Player sender, String boughtCmd, Double price){
+        Date date = new Date();
+        String timeStamp = date.toString();
+
+        purchaseLog.addLine(String.format("[%s] %s||%s bought a one time pass for %s for %s %s",
                 timeStamp, sender.getName(), sender.getUniqueId(), boughtCmd, price.toString(), getCurrencyPlural()));
     }
 
