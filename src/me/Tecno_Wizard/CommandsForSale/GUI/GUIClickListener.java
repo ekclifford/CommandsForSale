@@ -1,6 +1,7 @@
 package me.Tecno_Wizard.CommandsForSale.GUI;
 
 import me.Tecno_Wizard.CommandsForSale.commandProcessors.buyCommand.BuyCommandController;
+import me.Tecno_Wizard.CommandsForSale.core.Command;
 import me.Tecno_Wizard.CommandsForSale.core.Main;
 
 import org.bukkit.ChatColor;
@@ -43,7 +44,6 @@ public class GUIClickListener implements Listener {
 
 					// if it starts with /, it is the first window.
 					if (ChatColor.stripColor(meta.getDisplayName()).startsWith("/")) {
-
 						// removes the / in front of the name
 						String command = ChatColor.stripColor(meta.getDisplayName()).substring(1);
 
@@ -54,8 +54,10 @@ public class GUIClickListener implements Listener {
 						boolean purchaseReadyToConfirm = buyCmdCont.preformBuyCmd(player, new String[]{command}, true);
 
 						// close the inventory (The SAFE way) and open the second
-						@SuppressWarnings("unused")
-						BukkitTask task = new SwitchInventoryRunnable(player, purchaseReadyToConfirm).runTaskLater(main, 1);
+                        Command cmd = main.getResources().getCommand(command.toLowerCase());
+                        int type = cmd.canBeOneTimeUsed()? 1 : 0;
+
+						BukkitTask task = new SwitchInventoryRunnable(player, purchaseReadyToConfirm, type).runTaskLater(main, 1);
 						return;
 					}
 					// end of if starts with /
@@ -63,17 +65,21 @@ public class GUIClickListener implements Listener {
 					// if is purchase confirm
 					if(ChatColor.stripColor(meta.getDisplayName()).equalsIgnoreCase("Confirm Purchase")){
 						buyCmdCont.preformConfirm(player, new String[0]);
-						@SuppressWarnings("unused")
-						BukkitTask task = new SwitchInventoryRunnable(player, false).runTaskLater(main, 1);
+						BukkitTask task = new SwitchInventoryRunnable(player, false, 0).runTaskLater(main, 1);
 						
 					}
 					
-					// if is purchase confirm
-					if (ChatColor.stripColor(meta.getDisplayName()).equalsIgnoreCase("Deny Purchase")) {
+					// if is purchase deny
+					else if (ChatColor.stripColor(meta.getDisplayName()).equalsIgnoreCase("Deny Purchase")) {
 						buyCmdCont.preformDeny(player, new String[0]);
-						@SuppressWarnings("unused")
-						BukkitTask task = new SwitchInventoryRunnable(player, false).runTaskLater(main, 1);
+						BukkitTask task = new SwitchInventoryRunnable(player, false, 0).runTaskLater(main, 1);
 					}
+
+                    // if it is buying a pass
+
+                    else if(ChatColor.stripColor(meta.getDisplayName()).equalsIgnoreCase("One Use Pass")) {
+                        buyCmdCont.
+                    }
 				}
 			} catch (Exception error){}
 		}

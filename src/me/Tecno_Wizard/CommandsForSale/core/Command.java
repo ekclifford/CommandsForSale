@@ -6,24 +6,41 @@ import java.util.List;
  * @author Ethan Zeigler
  */
 public class Command {
+    // command name
     private String cmdName;
-    private double price;
+    // permanent purchase price
+    private double permPrice;
+    // single use price
+    private double singlePrice;
+    // permission
     private String perm;
+    // aliases
     private List<String> aliases;
+    // can be one time used
+    private boolean canBeOneTimeUsed;
+    // material representation
+    private String material;
 
-    public Command(String cmdName, double price, String perm, List<String> aliases) {
+    public Command(String cmdName, double permPrice, double singlePrice, String perm, boolean oneTimeuse, List<String> aliases, String material) {
         this.cmdName = cmdName;
-        this.price = price;
+        this.permPrice = permPrice;
+        this.singlePrice = singlePrice;
         this.perm = perm;
         this.aliases = aliases;
+        this.canBeOneTimeUsed = oneTimeuse;
+        this.material = material;
     }
 
     public String getCommandName() {
         return cmdName;
     }
 
-    public double getPrice() {
-        return price;
+    public double getPermanentPrice() {
+        return permPrice;
+    }
+
+    public double getSinglePrice(){
+        return this.singlePrice;
     }
 
     public String getPermission() {
@@ -35,9 +52,15 @@ public class Command {
     }
 
     public boolean needsPerm() {
-        if (perm == null)
-            return false;
-        else
+        if (perm == null) return false;
             return true;
+    }
+
+    public boolean canBeOneTimeUsed(){
+        return canBeOneTimeUsed;
+    }
+
+    public String getMaterial() {
+        return material;
     }
 }

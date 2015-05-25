@@ -1,8 +1,10 @@
 package me.Tecno_Wizard.CommandsForSale.core;
 
+import com.skionz.dataapi.DataFile;
 import com.skionz.dataapi.ListFile;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -23,20 +25,10 @@ public class Resources {
 
     private boolean displayVerisonInfo;
     private String versionInformation =
-            ChatColor.AQUA + "[CommandsForSale] Welcome to CommandsForSale Version 1.2!\n" +
-                    "Here's what has been added:\n" +
-                    "Players can now be marked exempt for buying commands using the permission node cmdsforsale.buyexempt\n" +
-                    "This allows you to specify purchase exempt players without giving them moderator abilites\n" +
-                    "GUI's are here! The system should be pretty self explanatory, just type /buycmd instead of /buycmd <Command>\n" +
-                    "Note that specifying the command will still work as it used to. The GUI can be turned off in the config.\n" +
-                    "All purchases are now logged in the plugin's folder. Go and check it out!\n" +
-                    "The next update will feature one time use commands!\n" +
-                    ChatColor.RED + "WARNING WARNING WARNING WARNING WARNING:\n" +
-                    "YOU MAY NEED TO DELETE THE OLD COMMANDSFORSALE FILE if the auto-updater updated the plugin!\n" +
-                    "Due to a bug with the updater, the old file may not be deleted!\n" +
-                    "PLEASE DELETE THE FILE MANUALLY IF NECESSARY!\n" +
-                    ChatColor.GOLD + "Thank you for your patience!";
-
+            ChatColor.AQUA + "[CommandsForSale] Welcome to CommandsForSale Version 1.2.2!\n" +
+                    "Added custom materials for commands in the GUI. " +
+                    ChatColor.RED + "Set the material for each command. The list has been pasted in the plugin folder. " +
+                    "THESE ARE CASE SENSITIVE.";
     Resources(Main main) {
         FileConfiguration config = main.getConfig();
         currencyPlural = config.getString("CurrencyPlural");
@@ -44,9 +36,11 @@ public class Resources {
 
         for (String cmd : main.getConfig().getStringList("MainCommands")) {
             // get values
-            double price = config.getDouble("CommandOptions." + cmd.toLowerCase() + ".price");
+            double permPrice = config.getDouble("CommandOptions." + cmd.toLowerCase() + ".price");
+            double oneTimePrice = config.getDouble("CommandOptions." + cmd.toLowerCase() + ".oneTimeUsePrice");
             String perm = config.getString("CommandOptions." + cmd.toLowerCase() + ".permission");
-
+            boolean canBeOneTimeUsed = config.getBoolean("CommandOptions." + cmd.toLowerCase() + ".canBeOneTimeUsed");
+            String material = config.getString("CommandOptions." + cmd.toLowerCase() + ".GUIIcon");
             // set perm to null if void
             if (perm.equalsIgnoreCase("void"))
                 perm = null;
@@ -54,7 +48,7 @@ public class Resources {
             List<String> aliases = config.getStringList("Aliases." + cmd);
 
             // add cmd
-            cmds.put(cmd, new Command(cmd, price, perm, aliases));
+            cmds.put(cmd, new Command(cmd, permPrice, oneTimePrice, perm, canBeOneTimeUsed, aliases, material));
 
             // get all commands
         }
@@ -78,7 +72,10 @@ public class Resources {
         for (String cmd : main.getConfig().getStringList("MainCommands")) {
             // get values
             double price = config.getDouble("CommandOptions." + cmd.toLowerCase() + ".price");
+            double oneTimePrice = config.getDouble("CommandOptions." + cmd.toLowerCase() + ".oneTimeUsePrice");
             String perm = config.getString("CommandOptions." + cmd.toLowerCase() + ".permission");
+            boolean canBeOneTimeUsed = config.getBoolean("CommandOptions." + cmd.toLowerCase() + ".canBeOneTimeUsed");
+            String material = config.getString("CommandOptions." + cmd.toLowerCase() + ".GUIIcon");
 
             // set perm to null if void
             if (perm.equalsIgnoreCase("void"))
@@ -87,7 +84,7 @@ public class Resources {
             List<String> aliases = config.getStringList("Aliases." + cmd);
 
             // add cmd
-            cmds.put(cmd, new Command(cmd.toLowerCase(), price, perm, aliases));
+            cmds.put(cmd, new Command(cmd.toLowerCase(), price, oneTimePrice, perm, canBeOneTimeUsed, aliases, material));
         }
     }
 
@@ -111,8 +108,16 @@ public class Resources {
         return new ListFile("plugins/CommandsForSale/Players/" + player.getUniqueId(), "txt");
     }
 
-    public ListFile getPlayerFile(String UUID){
+    public ListFile getPlayerPermanentFile(String UUID){
         return new ListFile("plugins/CommandsForSale/Players/" + UUID, "txt");
+    }
+
+    public DataFile getPlayerPassFile(String UUID){
+        return new DataFile("plugins/CommandsForSale/PlayerPasses/" + UUID, "txt");
+    }
+
+    public DataFile getPlayerPassFile(Player player){
+        return this.getPlayerPassFile(player.getUniqueId().toString());
     }
 
     public String getVersionInformation() {
@@ -130,7 +135,7 @@ public class Resources {
         }
     }
 
-    public void logPurchase(Player sender, String boughtCmd, Double price) {
+    public void logPermanentPurchase(Player sender, String boughtCmd, Double price) {
         Date date = new Date();
         String timeStamp = date.toString();
 
@@ -139,8 +144,24 @@ public class Resources {
                 timeStamp, sender.getName(), sender.getUniqueId(), boughtCmd, price.toString(), getCurrencyPlural()));
     }
 
+
+    public void logPassPurchase(Player sender, String boughtCmd, Double price){
+        Date date = new Date();
+        String timeStamp = date.toString();
+
+        purchaseLog.addLine(String.format("[%s] %s||%s bought a one time pass for %s for %s %s",
+                timeStamp, sender.getName(), sender.getUniqueId(), boughtCmd, price.toString(), getCurrencyPlural()));
+    }
+
     public void logString(String msg){
         purchaseLog.addLine(msg);
+    }
+
+    public static void sendMessage(String msg, CommandSender recipient){
+        sendMessage(msg, recipient, ChatColor.RESET);
+    }
+    public static void sendMessage(String msg, CommandSender recipient, ChatColor startColor){
+        recipient.sendMessage(String.format("%s[%s] %s", startColor, pluginPrefix, msg));
     }
 
 }

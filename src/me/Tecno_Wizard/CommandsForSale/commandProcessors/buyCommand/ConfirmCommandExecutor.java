@@ -28,14 +28,14 @@ public class ConfirmCommandExecutor {
 	public ConfirmationResponse perform(Player sender) {
 		if(MetaUtils.hasMetadata(sender, META_KEY_CMD)) {
 			String toBuy = MetaUtils.getMetadataValueAsString(sender, META_KEY_CMD);
-			Double price = main.getResources().getCommand(toBuy).getPrice();
+			Double price = main.getResources().getCommand(toBuy).getPermanentPrice();
 
 			//double check of if player can afford
 			if(econ.getBalance(sender) >= price) {
 				//takes out the money (if it can)
 				EconomyResponse eResponse = econ.withdrawPlayer(sender, price);
 				if(eResponse.transactionSuccess()) {
-					ListFile file = main.getResources().getPlayerFile(sender.getUniqueId().toString());
+					ListFile file = main.getResources().getPlayerPermanentFile(sender.getUniqueId().toString());
 					//adds the main command to usable
 					file.addLine(toBuy.toLowerCase());
 					// adds the aliases
@@ -44,7 +44,7 @@ public class ConfirmCommandExecutor {
 						file.addLine(alis.toLowerCase());
 					}
 					//add the purchase to the log
-					main.getResources().logPurchase(sender, toBuy, price);
+					main.getResources().logPermanentPurchase(sender, toBuy, price);
 					return ConfirmationResponse.CONFIRM_READY;
 				}
 				//if transaction failed
