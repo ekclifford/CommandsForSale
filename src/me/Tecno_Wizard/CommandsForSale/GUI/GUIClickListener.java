@@ -1,6 +1,8 @@
 package me.Tecno_Wizard.CommandsForSale.GUI;
 
 import me.Tecno_Wizard.CommandsForSale.commandProcessors.buyCommand.BuyCommandController;
+import me.Tecno_Wizard.CommandsForSale.commandProcessors.buyCommand.BuyCommandOnce.BuyOnceExecutor;
+import me.Tecno_Wizard.CommandsForSale.commandProcessors.buyCommand.MetaUtils;
 import me.Tecno_Wizard.CommandsForSale.core.Command;
 import me.Tecno_Wizard.CommandsForSale.core.Main;
 
@@ -17,10 +19,13 @@ import org.bukkit.scheduler.BukkitTask;
 public class GUIClickListener implements Listener {
 	private Main main;
 	private BuyCommandController buyCmdCont;
+    private BuyOnceExecutor buyOnceExecutor;
+    private static final String META_KEY_CMD = "CommandToBuy";
 
 	public GUIClickListener(Main main) {
 		this.main = main;
 		buyCmdCont = new BuyCommandController(main);
+        buyOnceExecutor = new BuyOnceExecutor(main);
 	}
 
 	@EventHandler
@@ -78,7 +83,9 @@ public class GUIClickListener implements Listener {
                     // if it is buying a pass
 
                     else if(ChatColor.stripColor(meta.getDisplayName()).equalsIgnoreCase("One Use Pass")) {
-                        buyCmdCont.
+                        String command = MetaUtils.getMetadataValueAsString(player, META_KEY_CMD);
+                        buyOnceExecutor.execute(player, new String[]{command});
+                        player.removeMetadata(META_KEY_CMD, main);
                     }
 				}
 			} catch (Exception error){}
