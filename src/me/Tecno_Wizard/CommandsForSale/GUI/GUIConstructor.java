@@ -2,6 +2,7 @@ package me.Tecno_Wizard.CommandsForSale.GUI;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import me.Tecno_Wizard.CommandsForSale.commandProcessors.buyCommand.BuyCommandController;
 import me.Tecno_Wizard.CommandsForSale.core.Main;
@@ -29,6 +30,7 @@ public class GUIConstructor implements CommandExecutor{
     private Main main;
     private ArrayList<ItemStack> buyableCmds = new ArrayList<>();
     private String pluginPrefix;
+    private static ItemStack passIcon;
     private static Inventory confirmPageWOPass;
     private static Inventory confirmPageWPass;
     private static ItemStack overflowIcon;
@@ -82,7 +84,6 @@ public class GUIConstructor implements CommandExecutor{
         return true;
     }
 
-
     private void prepare(){
         // create menu ArrayList
         for(String command: main.getConfig().getStringList("MainCommands")){
@@ -127,11 +128,11 @@ public class GUIConstructor implements CommandExecutor{
         denyIcon.setItemMeta(denyMeta);
 
         // pass icon
-        ItemStack passIcon = new ItemStack(Material.NAME_TAG);
+        passIcon = new ItemStack(Material.NAME_TAG);
         ItemMeta passMeta = passIcon.getItemMeta();
         passMeta.setDisplayName(ChatColor.GOLD + "One Use Pass");
         lore.clear();
-        lore.add(ChatColor.AQUA + "Click to buy a 1 time use pass for");
+        lore.add(ChatColor.AQUA + "Click to buy a 1 time use pass for ");
         passMeta.setLore(lore);
         passIcon.setItemMeta(passMeta);
 
@@ -214,11 +215,19 @@ public class GUIConstructor implements CommandExecutor{
         }
     }
 
-    public static Inventory getConfirmPageWPass() {
+    public static Inventory getConfirmPageWPass(me.Tecno_Wizard.CommandsForSale.core.Command cmd, String currency) {
+        ItemStack editedPass = passIcon.clone();
+        ItemMeta meta = editedPass.getItemMeta();
+        List<String> lore = meta.getLore();
+        lore.set(0, meta.getLore().get(0) + cmd.getSinglePrice() + " " + currency);
+        meta.setLore(lore);
+        editedPass.setItemMeta(meta);
+        confirmPageWPass.setItem(6, editedPass);
         return confirmPageWPass;
     }
 
     public static Inventory getConfirmPageWOPass() {
         return confirmPageWOPass;
     }
+
 }

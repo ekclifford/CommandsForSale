@@ -1,32 +1,34 @@
-package me.Tecno_Wizard.CommandsForSale.core;
+package com.Tecno_Wizard.CommandsForSale.core;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.logging.Logger;
-
+import com.Tecno_Wizard.CommandsForSale.language.Language;
+import com.skionz.dataapi.DataFile;
 import me.Tecno_Wizard.CommandsForSale.GUI.GUIClickListener;
 import me.Tecno_Wizard.CommandsForSale.GUI.GUIConstructor;
 import me.Tecno_Wizard.CommandsForSale.commandProcessors.BoughtCmdsExecutor;
 import me.Tecno_Wizard.CommandsForSale.commandProcessors.CmdsToBuyExecutor;
-import me.Tecno_Wizard.CommandsForSale.commandProcessors.buyCommand.BuyCommandOnce.BuyOnceExecutor;
-import me.Tecno_Wizard.CommandsForSale.commandProcessors.modCommands.ModCommandsController;
-import me.Tecno_Wizard.CommandsForSale.saveConvertSystems.ConvertSave;
-import me.Tecno_Wizard.CommandsForSale.updateWarning.ModUpdateWarner;
 import me.Tecno_Wizard.CommandsForSale.commandProcessors.IncommingCommandProcessor;
 import me.Tecno_Wizard.CommandsForSale.commandProcessors.VaultFailedBuyCmdsExecutor;
 import me.Tecno_Wizard.CommandsForSale.commandProcessors.buyCommand.BuyCommandController;
+import me.Tecno_Wizard.CommandsForSale.commandProcessors.buyCommand.BuyCommandOnce.BuyOnceExecutor;
+import me.Tecno_Wizard.CommandsForSale.commandProcessors.modCommands.ModCommandsController;
+import me.Tecno_Wizard.CommandsForSale.core.Metrics;
+import me.Tecno_Wizard.CommandsForSale.core.Resources;
+import me.Tecno_Wizard.CommandsForSale.core.Updater;
 import me.Tecno_Wizard.CommandsForSale.core.Updater.UpdateType;
+import me.Tecno_Wizard.CommandsForSale.saveConvertSystems.ConvertSave;
+import me.Tecno_Wizard.CommandsForSale.updateWarning.ModUpdateWarner;
 import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.json.simple.JSONObject;
 
-import com.skionz.dataapi.DataFile;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Logger;
 
 /**
  * Main class of CommandsForSale
@@ -34,17 +36,19 @@ import com.skionz.dataapi.DataFile;
  * @author Ethan Zeigler
  *
  */
-public class Main extends JavaPlugin {
+public class CommandsForSale extends JavaPlugin {
     private static Resources resources;
     private static final Logger log = Bukkit.getLogger();
     public static Economy econ;
     private static DataFile save;
-    private static Metrics pm;
+    private static me.Tecno_Wizard.CommandsForSale.core.Metrics pm;
     private static Updater updater;
     private static boolean vaultIsReady;
+    private Language lang;
 
     @Override
     public void onEnable() {
+        lang = new Language(this);
         if (!setupEconomy()) {
             // if the economy could not be loaded at the fault
             // of Vault (heh, rhyme) or the economy plugin
@@ -100,80 +104,63 @@ public class Main extends JavaPlugin {
 
     // controls setup of config file
     public void setUpConfig() {
-        super.reloadConfig();// makes sure that the current version of the file
-        // is loaded
 
-        // these 2 values are set to comply with the Curse rules, or i'd have
-        // them always on (sorry)
+        super.reloadConfig();// makes sure that the current version of the file is loaded
+
         getConfig().addDefault("UpdaterOn", true);
-        getConfig().addDefault("AutomaticallyUpdate", false);
-        getConfig().addDefault("CurrencyPlural", "void");
-
-        // other values
+        getConfig().addDefault("CurrencyPlural", "PLEASE SET TO THE PLURAL FORM OF YOUR CURRENCY!");
         getConfig().addDefault("PluginPrefix", "CommandsForSale");
-        getConfig().addDefault("GUIEnabled", true);
 
-        // adds the MainCommands section of config
-        getConfig().addDefault("MainCommands", new ArrayList<String>());
+        // adds the Commands section of config
+        getConfig().addDefault("Commands", new ArrayList<String>());
 
         // if a value with the same name as the default exists, it will not be
         // touched, otherwise the default will be added
         getConfig().options().copyDefaults(true);
         saveConfig();
 
-        if (!getConfig().contains("CommandOptions")) {
-            log.severe("[CommandsForSale] It seems that either your configuration has been corrupted or is empty.\n"
-                    + "[CommandsForSale] The plugin will not operate without any commands. Make sure you are " +
-                    "regularly saving a copy of the configuration in case of corruption.");
-        }
-
         ArrayList<String> inLower = new ArrayList<>();
 
         // changes commands to lower case
-        for (String toChange : getConfig().getStringList("MainCommands")) {
+        for (String toChange : getConfig().getStringList("Commands")) {
             inLower.add(toChange.toLowerCase());
         }
-        getConfig().set("MainCommands", inLower);
+
+        getConfig().set("Commands", inLower);
         saveConfig();
 
         // controls and generates the command options section
-        for (String commandName : getConfig().getStringList("MainCommands")) {
+        for (String commandName : getConfig().getStringList("Commands")) {
+            getConfig().addDefault("CommandOptions." + commandName + ".commandRegex", commandName);
+            getConfig().addDefault("CommandOptions." + commandName + ".description", "ENTER DESCRIPTION");
             getConfig().addDefault("CommandOptions." + commandName + ".price", 0);
             getConfig().addDefault("CommandOptions." + commandName + ".canBeOneTimeUsed", true);
             getConfig().addDefault("CommandOptions." + commandName + ".oneTimeUsePrice", 0);
-            getConfig().addDefault("CommandOptions." + commandName + ".permission", "void");
+            getConfig().addDefault("CommandOptions." + commandName + ".permission", "");
             getConfig().addDefault("CommandOptions." + commandName + ".GUIIcon", "WEB");
         }
+
+        if (!getConfig().contains("CommandOptions")) {
+            log.severe("[CommandsForSale] It seems your config is empty.\n"
+                    + "[CommandsForSale] The plugin will not operate without any commands. Please add a command.");
+        }
+
         // save again
         getConfig().options().copyDefaults(true);
         saveConfig();
-        // controls aliases section
-        for (String cmd : getConfig().getStringList("MainCommands"))
 
-        {
-            getConfig().addDefault("Aliases." + cmd, new ArrayList<String>());
-        }
         // save again
         getConfig().options().copyDefaults(true);
         saveConfig();
 
         // generates all commands to prevent searching through the entire config
         // on each run of a command
-        ArrayList<String> allCmds = new ArrayList<>();
-        for (String cmd : getConfig().getStringList("MainCommands")) {
-            allCmds.add(cmd);
-            for (String aliase : getConfig().getStringList("Aliases." + cmd)) {
-                allCmds.add(aliase);
-            }
-        }
-        getConfig().set("AllCommands", allCmds);
         saveConfig();
         resources = new Resources(this);
     }
 
     // controls mainsave file
     public void initiateSave() {
-        ConvertSave.attemptConvert(this);
 
         save = new DataFile("plugins" + File.separator + "CommandsForSale"
                 + File.separator + "MainSave", "txt");
@@ -182,7 +169,7 @@ public class Main extends JavaPlugin {
             // since the plugin has not run before or someone was an idiot and
             // corrupted their save file, we shall attack with characters
             log.info("[CommandsForSale] Welcome to CommandsForSale!\n"
-                    + "[CommandsForSale] You are seeing this because there was no main save file or you just updated\n"
+                    + "[CommandsForSale] You are seeing this because there was no main save file.\n"
                     + "[CommandsForSale] Make sure to configure your settings in the config if you have not already!\n"
                     + "[CommandsForSale] Instructions on how to use the config are on the Bukkit page in PDF "
                     + "form under the config section! Just Google bukkit commandsforsale or search for it in BukkitDev\n"

@@ -1,6 +1,6 @@
 name: CommandsForSale
 description: 'Allows the purchasing and protecting of commands'
-version: 1.2.2
+version: 1.2.3
 author: 'Tecno_Wizard'
 main: me.Tecno_Wizard.CommandsForSale.core.Main
 commands:

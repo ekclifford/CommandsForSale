@@ -6,13 +6,16 @@ import me.Tecno_Wizard.CommandsForSale.commandProcessors.buyCommand.MetaUtils;
 import me.Tecno_Wizard.CommandsForSale.core.Command;
 import me.Tecno_Wizard.CommandsForSale.core.Main;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -26,7 +29,7 @@ public class GUIClickListener implements Listener {
 		this.main = main;
 		buyCmdCont = new BuyCommandController(main);
         buyOnceExecutor = new BuyOnceExecutor(main);
-	}
+    }
 
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent e) {
@@ -62,7 +65,7 @@ public class GUIClickListener implements Listener {
                         Command cmd = main.getResources().getCommand(command.toLowerCase());
                         int type = cmd.canBeOneTimeUsed()? 1 : 0;
 
-						BukkitTask task = new SwitchInventoryRunnable(player, purchaseReadyToConfirm, type).runTaskLater(main, 1);
+						BukkitTask task = new SwitchInventoryRunnable(player, purchaseReadyToConfirm, type, main.getResources()).runTaskLater(main, 1);
 						return;
 					}
 					// end of if starts with /
@@ -70,14 +73,14 @@ public class GUIClickListener implements Listener {
 					// if is purchase confirm
 					if(ChatColor.stripColor(meta.getDisplayName()).equalsIgnoreCase("Confirm Purchase")){
 						buyCmdCont.preformConfirm(player, new String[0]);
-						BukkitTask task = new SwitchInventoryRunnable(player, false, 0).runTaskLater(main, 1);
+						BukkitTask task = new SwitchInventoryRunnable(player, false, 0, main.getResources()).runTaskLater(main, 1);
 						
 					}
 					
 					// if is purchase deny
 					else if (ChatColor.stripColor(meta.getDisplayName()).equalsIgnoreCase("Deny Purchase")) {
 						buyCmdCont.preformDeny(player, new String[0]);
-						BukkitTask task = new SwitchInventoryRunnable(player, false, 0).runTaskLater(main, 1);
+						BukkitTask task = new SwitchInventoryRunnable(player, false, 0, main.getResources()).runTaskLater(main, 1);
 					}
 
                     // if it is buying a pass
@@ -86,6 +89,7 @@ public class GUIClickListener implements Listener {
                         String command = MetaUtils.getMetadataValueAsString(player, META_KEY_CMD);
                         buyOnceExecutor.execute(player, new String[]{command});
                         player.removeMetadata(META_KEY_CMD, main);
+                        BukkitTask task = new SwitchInventoryRunnable(player, false, 0, main.getResources()).runTaskLater(main, 1);
                     }
 				}
 			} catch (Exception error){}

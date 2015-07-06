@@ -34,10 +34,10 @@ public class IncommingCommandProcessor implements Listener {
             String[] args = command.split(" ");
 
             // if the command must be purchased for use
-            if (main.getConfig().getStringList("AllCommands").contains(args[0])) {
+            if (main.getConfig().getStringList("AllCommands").contains(args[0].toLowerCase())) {
                 ArrayList<String> purchased = main.getResources().getPlayerFile(e.getPlayer()).read();
                 // if the player has not purchased the command
-                if (!purchased.contains(args[0])) {
+                if (!purchased.contains(args[0].toLowerCase())) {
                     DataFile file = main.getResources().getPlayerPassFile(e.getPlayer());
                     Integer value;
                     if(file.isInt(args[0].toLowerCase())) {
@@ -47,7 +47,6 @@ public class IncommingCommandProcessor implements Listener {
                         Resources.sendMessage("Using command pass! " + (value-1) + " remaining!", e.getPlayer(), ChatColor.GREEN);
                         file.set(args[0].toLowerCase(), value-1);
                         file.save();
-                        //TODO log use of pass
                     } else {
                         e.getPlayer().sendMessage(
                                 String.format("%s[%s] %s%s %sor its main command such as /balance to /bal must be purchased before it can be used.\n" +

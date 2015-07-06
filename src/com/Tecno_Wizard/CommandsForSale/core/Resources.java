@@ -1,7 +1,9 @@
-package me.Tecno_Wizard.CommandsForSale.core;
+package com.Tecno_Wizard.CommandsForSale.core;
 
 import com.skionz.dataapi.DataFile;
 import com.skionz.dataapi.ListFile;
+import me.Tecno_Wizard.CommandsForSale.core.*;
+import me.Tecno_Wizard.CommandsForSale.core.Command;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -20,7 +22,7 @@ import java.util.Set;
 public class Resources {
     private static String pluginPrefix;
     private static String currencyPlural;
-    private static HashMap<String, Command> cmds = new HashMap<>();
+    private static HashMap<String, me.Tecno_Wizard.CommandsForSale.core.Command> cmds = new HashMap<>();
     private static ListFile purchaseLog;
 
     private boolean displayVerisonInfo;
@@ -50,7 +52,7 @@ public class Resources {
             List<String> aliases = config.getStringList("Aliases." + cmd);
 
             // add cmd
-            cmds.put(cmd, new Command(cmd, permPrice, oneTimePrice, perm, canBeOneTimeUsed, aliases, material));
+            cmds.put(cmd, new me.Tecno_Wizard.CommandsForSale.core.Command(cmd, permPrice, oneTimePrice, perm, canBeOneTimeUsed, aliases, material));
 
             // get all commands
         }
@@ -86,7 +88,7 @@ public class Resources {
             List<String> aliases = config.getStringList("Aliases." + cmd);
 
             // add cmd
-            cmds.put(cmd, new Command(cmd.toLowerCase(), price, oneTimePrice, perm, canBeOneTimeUsed, aliases, material));
+            cmds.put(cmd, new me.Tecno_Wizard.CommandsForSale.core.Command(cmd.toLowerCase(), price, oneTimePrice, perm, canBeOneTimeUsed, aliases, material));
         }
     }
 

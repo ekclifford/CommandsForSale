@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -40,6 +41,16 @@ public class DataFile {
 		}
 		this.fileMap = this.toMap();
 	}
+
+    public DataFile(File file) {
+        this.file = file;
+        try {
+            file.createNewFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.fileMap = this.toMap();
+    }
 	
 	/**
 	 * Saves the current data to the file
