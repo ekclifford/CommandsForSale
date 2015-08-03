@@ -1,5 +1,12 @@
 package me.Tecno_Wizard.CommandsForSale.core;
 
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -8,13 +15,6 @@ import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 /**
  * Check for updates on BukkitDev for a given plugin, and download the updates if needed.
@@ -54,7 +54,7 @@ public class Updater {
 	// Used for locating version numbers in file names
 	private static final String DELIMETER = "^v|[\\s_-]v";
 	// If the version number contains one of these, don't update.
-	private static final String[] NO_UPDATE_TAG = { "-DEV", "-PRE", "-SNAPSHOT" };
+	private static final String[] NO_UPDATE_TAG = { "-DEV", "-PRE", "-SNAPSHOT", "-MANUALUPDATE" };
 	// Used for downloading files
 	private static final int BYTE_SIZE = 1024;
 	// Config key for api key
@@ -140,7 +140,11 @@ public class Updater {
 		/**
 		 * The updater found an update, but because of the UpdateType being set to NO_DOWNLOAD, it wasn't downloaded.
 		 */
-		UPDATE_AVAILABLE
+		UPDATE_AVAILABLE,
+        /**
+         * The updater found an update, but it was marked for a manual download.
+         */
+        MANUAL_UPDATE_AVAILABLE
 	}
 
 	/**
@@ -559,9 +563,12 @@ public class Updater {
 				// Get the newest file's version number
 				final String remoteVersion = title.split(DELIMETER)[1].split(" ")[0];
 
-				if (this.hasTag(localVersion) || !this.shouldUpdate(localVersion, remoteVersion)) {
-					// We already have the latest version, or this build is tagged for no-update
-					this.result = UpdateResult.NO_UPDATE;
+                if (!this.shouldUpdate(localVersion, remoteVersion)) {
+                    if (this.hasTag(localVersion)) {
+                        this.result = UpdateResult.MANUAL_UPDATE_AVAILABLE;
+                    } else {
+                        this.result = UpdateResult.NO_UPDATE;
+                    }
 					return false;
 				}
 			} else {
@@ -605,6 +612,7 @@ public class Updater {
 	 * @return true if Updater should consider the remote version an update, false if not.
 	 */
 	public boolean shouldUpdate(String localVersion, String remoteVersion) {
+
 		return !localVersion.equalsIgnoreCase(remoteVersion);
 	}
 
@@ -742,4 +750,8 @@ public class Updater {
 	private void runCallback() {
 		this.callback.onFinish(this);
 	}
+
+    public Plugin getPlugin() {
+        return this.plugin;
+    }
 }

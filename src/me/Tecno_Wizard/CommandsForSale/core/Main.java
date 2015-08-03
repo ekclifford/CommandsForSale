@@ -2,7 +2,6 @@ package me.Tecno_Wizard.CommandsForSale.core;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -42,6 +41,7 @@ public class Main extends JavaPlugin {
 	private static Metrics pm;
 	private static Updater updater;
 	private static boolean vaultIsReady;
+    private static UpdateScheduler updateScheduler;
 
 	@Override
 	public void onEnable() {
@@ -63,7 +63,7 @@ public class Main extends JavaPlugin {
 		registerListeners();
 		registerCmds();
         writeReadMeFiles();
-		checkForUpdate();
+		runUpdaterService();
 
 		// final operations
 		resources.logString("The plugin was enabled.");
@@ -86,7 +86,7 @@ public class Main extends JavaPlugin {
 		registerCmds();
 		/* no call to register listeners, as there will just be duplicates.
 		 Listeners have been adjusted to automatically reflect changes. */
-		checkForUpdate();
+		runUpdaterService();
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -298,31 +298,16 @@ public class Main extends JavaPlugin {
 		return econ != null;
 	}
 
-	@SuppressWarnings("incomplete-switch")
-	// Checks for plugin update, using gravity_low's Updater API
-	private void checkForUpdate() {
-		if (getConfig().getBoolean("UpdaterOn", true)) {
-			UpdateType type;
-			if (getConfig().getBoolean("AutomaticallyUpdate", false))
-				type = UpdateType.DEFAULT;
-			else
-				type = UpdateType.NO_DOWNLOAD;
-
-			updater = new Updater(this, 86562, this.getFile(), type, true);
-			switch (updater.getResult()) {
-			case UPDATE_AVAILABLE:
-				Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[CommandsForSale] There is an update ready to download. Download it from BukkitDev or turn AutomaticallyUpdate to true.");
-				break;
-			case SUCCESS:
-				Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[CommandsForSale] The next version of CommandsForSale has been downloaded! Reload to implement it.");
-				break;
-			case FAIL_DOWNLOAD:
-				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[CommandsForSale] There is a new version of CommandsForSale, but it failed to download.\nYou May need to download it from the site.");
-				break;
-			}
-		} else
-			updater = null;
-	}
+    protected void runUpdaterService() {
+        Updater.UpdateType type = Updater.UpdateType.NO_DOWNLOAD;
+        if (getConfig().getBoolean("UpdaterOn")) {
+            if (getConfig().getBoolean("AutomaticallyUpdate", true)) {
+                type = Updater.UpdateType.DEFAULT;
+            }
+            // TODO customize for your server
+            updater = new Updater(this, 86562, this.getFile(), type, updateScheduler);
+        }
+    }
 
     private void writeReadMeFiles(){
         saveResource("MaterialList.txt", true);
