@@ -41,7 +41,7 @@ public class Main extends JavaPlugin {
 	private static Metrics pm;
 	private static Updater updater;
 	private static boolean vaultIsReady;
-    private static UpdateScheduler updateScheduler;
+    private static Updater.UpdateCallback callback;
 
 	@Override
 	public void onEnable() {
@@ -64,6 +64,7 @@ public class Main extends JavaPlugin {
 		registerCmds();
         writeReadMeFiles();
 		runUpdaterService();
+        callback = new UpdateScheduler();
 
 		// final operations
 		resources.logString("The plugin was enabled.");
@@ -73,6 +74,7 @@ public class Main extends JavaPlugin {
 	public void onDisable(){
 		Date date = new Date();
 		resources.logString("The plugin was shut down at " + date.toString());
+        getServer().getScheduler().cancelTasks(this);
 	}
 
 	/**
@@ -103,6 +105,7 @@ public class Main extends JavaPlugin {
 		// them always on (sorry)
 		getConfig().addDefault("UpdaterOn", true);
 		getConfig().addDefault("AutomaticallyUpdate", false);
+        getConfig().addDefault("TimeBetweenUpdateChecksInMins", 432000);
 		getConfig().addDefault("CurrencyPlural", "void");
 		
 		// other values
@@ -184,7 +187,7 @@ public class Main extends JavaPlugin {
 					+ "form under the config section! Just Google bukkit commandsforsale or search for it in BukkitDev\n"
 					+ "[CommandsForSale] ENJOY IT!");
 			save.set("NumberOfTimesRan", 1);
-			save.set("V1.2.1HasRan", false);
+			save.set("V1.2.4HasRan", false);
 			save.save();
 
 		} else {
@@ -193,11 +196,11 @@ public class Main extends JavaPlugin {
 			save.save();
 		}
 
-		Boolean hasRunVersion = save.getBoolean("V1.2.2HasRan");
+		Boolean hasRunVersion = save.getBoolean("V1.2.4HasRan");
 		if(hasRunVersion == null)
 			hasRunVersion = false;
 		resources.setDisplayVerisonInfo(!hasRunVersion);
-		save.set("V1.2.2HasRan", true);
+		save.set("V1.2.4HasRan", true);
 
 		// feedback message (I like feedback)
 		if (save.getInt("NumberOfTimesRan") == 5
@@ -299,13 +302,19 @@ public class Main extends JavaPlugin {
 	}
 
     protected void runUpdaterService() {
-        Updater.UpdateType type = Updater.UpdateType.NO_DOWNLOAD;
+        final Updater.UpdateType type;
         if (getConfig().getBoolean("UpdaterOn")) {
             if (getConfig().getBoolean("AutomaticallyUpdate", true)) {
                 type = Updater.UpdateType.DEFAULT;
+            } else {
+                type = UpdateType.NO_DOWNLOAD;
             }
-            // TODO customize for your server
-            updater = new Updater(this, 86562, this.getFile(), type, updateScheduler);
+            getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
+                @Override
+                public void run() {
+                    updater = new Updater(Main.this, 86562, Main.this.getFile(), type, callback);
+                }
+            }, 1, getConfig().getLong("TimeBetweenUpdateChecksInMins", 432000));
         }
     }
 

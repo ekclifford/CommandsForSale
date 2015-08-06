@@ -25,10 +25,8 @@ public class Resources {
 
     private boolean displayVerisonInfo;
     private String versionInformation =
-            ChatColor.AQUA + "[CommandsForSale] Welcome to CommandsForSale Version 1.2.2!\n" +
-                    "Added custom materials for commands in the GUI. " +
-                    ChatColor.RED + "Set the material for each command. The list has been pasted in the plugin folder. " +
-                    "THESE ARE CASE SENSITIVE.";
+            ChatColor.AQUA + "[CommandsForSale] Welcome to CommandsForSale Version 1.2.4!\n" +
+                    "Enhanced updater to run at scheduled intervals.\nFixed /help commandsforsale's menu.";
     Resources(Main main) {
         FileConfiguration config = main.getConfig();
         currencyPlural = config.getString("CurrencyPlural");

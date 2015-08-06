@@ -7,6 +7,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import javax.swing.text.html.HTML;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -55,6 +56,8 @@ public class Updater {
 	private static final String DELIMETER = "^v|[\\s_-]v";
 	// If the version number contains one of these, don't update.
 	private static final String[] NO_UPDATE_TAG = { "-DEV", "-PRE", "-SNAPSHOT", "-MANUALUPDATE" };
+    // If the version number contains this string, warn the user of a critical update
+    private static final String CRITICAL_UPDATE_TAG = "-CRITICAL";
 	// Used for downloading files
 	private static final int BYTE_SIZE = 1024;
 	// Config key for api key
@@ -144,7 +147,11 @@ public class Updater {
         /**
          * The updater found an update, but it was marked for a manual download.
          */
-        MANUAL_UPDATE_AVAILABLE
+        MANUAL_UPDATE_AVAILABLE,
+        /**
+         * The updater has found a critical update and updating is highly recommended
+         */
+        CRITICAL_UPDATE_AVALIBLE;
 	}
 
 	/**
@@ -182,6 +189,24 @@ public class Updater {
 		 */
 		RELEASE
 	}
+
+    /**
+     * Represents the type of tag on the version.
+     */
+    private enum TagType {
+        /**
+         * No tag is on the version.
+         */
+        NO_TAG,
+        /**
+         * A manual update tag is on the version.
+         */
+        MANUAL_UPDATE,
+        /**
+         * A critical update tag is on the version.
+         */
+        CRITICAL_UPDATE;
+    }
 
 	/**
 	 * Initialize the updater.
@@ -562,15 +587,17 @@ public class Updater {
 			if (title.split(DELIMETER).length == 2) {
 				// Get the newest file's version number
 				final String remoteVersion = title.split(DELIMETER)[1].split(" ")[0];
-
-                if (!this.shouldUpdate(localVersion, remoteVersion)) {
-                    if (this.hasTag(localVersion)) {
-                        this.result = UpdateResult.MANUAL_UPDATE_AVAILABLE;
-                    } else {
-                        this.result = UpdateResult.NO_UPDATE;
+                if (this.shouldUpdate(localVersion, remoteVersion)) {
+                    switch(this.getTag(localVersion)) {
+                        case CRITICAL_UPDATE: this.result = UpdateResult.CRITICAL_UPDATE_AVALIBLE;
+                            break;
+                        case MANUAL_UPDATE: this.result = UpdateResult.MANUAL_UPDATE_AVAILABLE;
+                            break;
+                        case NO_TAG: this.result = UpdateResult.UPDATE_AVAILABLE;
+                        }
                     }
-					return false;
-				}
+                    return true;
+				} else return false;
 			} else {
 				// The file's name did not contain the string 'vVersion'
 				final String authorInfo = this.plugin.getDescription().getAuthors().isEmpty() ? "" : " (" + this.plugin.getDescription().getAuthors().get(0) + ")";
@@ -581,8 +608,6 @@ public class Updater {
 				return false;
 			}
 		}
-		return true;
-	}
 
 	/**
 	 * <b>If you wish to run mathematical versioning checks, edit this method.</b>
@@ -622,13 +647,15 @@ public class Updater {
 	 * @param version a version number to check for tags in.
 	 * @return true if updating should be disabled.
 	 */
-	private boolean hasTag(String version) {
+	private TagType getTag(String version) {
 		for (final String string : Updater.NO_UPDATE_TAG) {
 			if (version.contains(string)) {
-				return true;
-			}
+				return TagType.MANUAL_UPDATE;
+			} else if(version.contains(CRITICAL_UPDATE_TAG)) {
+                return TagType.CRITICAL_UPDATE;
+            }
 		}
-		return false;
+		return TagType.NO_TAG;
 	}
 
 	/**
@@ -732,8 +759,6 @@ public class Updater {
 					name = this.versionLink.substring(this.versionLink.lastIndexOf("/") + 1);
 				}
 				this.saveFile(name);
-			} else {
-				this.result = UpdateResult.UPDATE_AVAILABLE;
 			}
 		}
 

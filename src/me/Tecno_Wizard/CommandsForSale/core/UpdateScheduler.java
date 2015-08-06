@@ -1,26 +1,14 @@
 package me.Tecno_Wizard.CommandsForSale.core;
 
-import net.gravitydevelopment.updater.Updater;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.ChatColor;
 
 /**
  * Created by Ethan Zeigler on 7/3/2015 for BukkitPluginTemplate.
  */
 public class UpdateScheduler implements Updater.UpdateCallback {
-    private JavaPlugin plugin;
-    private BukkitRunnable runnable;
-    public boolean isRunning = true;
 
-    public UpdateScheduler(final Main main) {
-        plugin = main;
-        runnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                main.runUpdaterService();
-            }
-        };
+    public UpdateScheduler() {
     }
 
     /**
@@ -60,13 +48,9 @@ public class UpdateScheduler implements Updater.UpdateCallback {
                 return;
             case DISABLED:
                 return;
+            case CRITICAL_UPDATE_AVALIBLE:
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[CommandsForSale] Update Advised!: The latest BukkitDev file is marked as a critical update, meaning that there " +
+                        "is likely a significant bug in later versions of the plugin. Please update ASAP.");
         }
-        if(isRunning) {
-            // set to run again in 1 hour (60 mins)
-            runnable.runTaskLater(plugin, (1200 * 60));
-        }
-    }
-    public void stop() {
-        this.isRunning = false;
     }
 }

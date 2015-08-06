@@ -6,20 +6,26 @@ main: me.Tecno_Wizard.CommandsForSale.core.Main
 commands:
   buycmd:
     description: Initiates the purchasing of a command
+    permission: cmdsforsale.use
   confirm:
     description: Confirms a command purchase
+    permission: cmdsforsale.use
   deny:
     description: Denies the purchase of a command
+    permission: cmdsforsale.use
   cmdstobuy:
     description: Lists all purchasable commands
+    permission: cmdsforsale.use
   boughtcmds:
     description: Lists the commands you have bought
+    permission: cmdsforsale.use
   cmdsforsale:
     description: Holds the commands for admin-only functions
     permission: cmdsforsale.moderator
     aliases: cfs
   buyonce:
     description: Buys one time use pass with argument of cmd name. If second arg is price, prints price.
+    permission: cmdsforsale.use
 permissions:
   cmdsforsale.moderator:
     description: Gives access to all commands and admin functions
@@ -27,4 +33,7 @@ permissions:
       cmdsforsale.buyexempt: true
   cmdsforsale.buyexempt:
     description: Makes it so the player does not need to buy commands
+  cmdsforsale.use:
+    description: Gives players the ability to see the use menu.
+    default: true
 softdepend: [Vault]
