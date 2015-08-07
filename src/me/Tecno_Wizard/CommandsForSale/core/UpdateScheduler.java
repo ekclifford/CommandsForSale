@@ -2,13 +2,16 @@ package me.Tecno_Wizard.CommandsForSale.core;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Created by Ethan Zeigler on 7/3/2015 for BukkitPluginTemplate.
  */
 public class UpdateScheduler implements Updater.UpdateCallback {
 
-    public UpdateScheduler() {
+    JavaPlugin plugin;
+    public UpdateScheduler(JavaPlugin plugin) {
+        this.plugin = plugin;
     }
 
     /**
@@ -45,6 +48,7 @@ public class UpdateScheduler implements Updater.UpdateCallback {
                 break;
             case SUCCESS:
                 Bukkit.getLogger().info("[CommandsForSale] Update Success!: reload or restart server to load the new version of the plugin");
+                Bukkit.getServer().getScheduler().cancelTasks(plugin);
                 return;
             case DISABLED:
                 return;

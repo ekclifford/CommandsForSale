@@ -64,7 +64,7 @@ public class Main extends JavaPlugin {
 		registerCmds();
         writeReadMeFiles();
 		runUpdaterService();
-        callback = new UpdateScheduler();
+        callback = new UpdateScheduler(this);
 
 		// final operations
 		resources.logString("The plugin was enabled.");
@@ -105,7 +105,7 @@ public class Main extends JavaPlugin {
 		// them always on (sorry)
 		getConfig().addDefault("UpdaterOn", true);
 		getConfig().addDefault("AutomaticallyUpdate", false);
-        getConfig().addDefault("TimeBetweenUpdateChecksInMins", 432000);
+        getConfig().addDefault("TimeBetweenUpdateChecksInMins", 360);
 		getConfig().addDefault("CurrencyPlural", "void");
 		
 		// other values
@@ -314,7 +314,7 @@ public class Main extends JavaPlugin {
                 public void run() {
                     updater = new Updater(Main.this, 86562, Main.this.getFile(), type, callback);
                 }
-            }, 1, getConfig().getLong("TimeBetweenUpdateChecksInMins", 432000));
+            }, 1, getConfig().getLong("TimeBetweenUpdateChecksInMins", 360)*20*60);
         }
     }
 

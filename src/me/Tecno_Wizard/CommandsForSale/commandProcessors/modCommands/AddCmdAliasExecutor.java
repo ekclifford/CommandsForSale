@@ -24,7 +24,7 @@ public class AddCmdAliasExecutor
 			ArrayList<String> aliases = (ArrayList<String>) main.getConfig().getStringList("Aliases." + args[1].toLowerCase());
 			aliases.add(args[2].toLowerCase());
 			main.getConfig().set("Aliases." + args[1].toLowerCase(), aliases);
-			sender.sendMessage(String.format("%s[%s] Aliase added", ChatColor.GREEN, pluginPrefix));
+			sender.sendMessage(String.format("%s[%s] Alias added", ChatColor.GREEN, pluginPrefix));
 			main.saveConfig();
 			main.setUpConfig();
 		}
@@ -47,7 +47,7 @@ public class AddCmdAliasExecutor
 		}
 		else
 		{
-			sender.sendMessage(String.format("[%s] Imporper use: %s/cfs addaliase <Command Name> <Aliase Name>", pluginPrefix, ChatColor.GOLD));
+			sender.sendMessage(String.format("[%s] Improper use: %s/cfs addalias <Command Name> <Aliase Name>", pluginPrefix, ChatColor.GOLD));
 			return false;
 		}
 		return false;//this should never run if everything works
