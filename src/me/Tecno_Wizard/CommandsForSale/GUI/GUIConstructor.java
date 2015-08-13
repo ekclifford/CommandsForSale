@@ -47,6 +47,11 @@ public class GUIConstructor implements CommandExecutor{
             if (!sender.hasPermission("cmdsforsale.buyexempt")) {
                 if (args.length == 0) {
                     Inventory inv = this.getFirstInventory((Player) sender);
+                    for(ItemStack is: inv.getContents())
+                        if(is != null) {
+                            System.out.println(is.toString());
+                        }
+                    System.out.println("Done");
 
                     // check to see if inventory is empty
                     boolean isEmpty = true;
@@ -169,6 +174,7 @@ public class GUIConstructor implements CommandExecutor{
 
     public Inventory getFirstInventory(Player player){
 
+
         Inventory iv = Bukkit.createInventory(null, 36, ChatColor.LIGHT_PURPLE + pluginPrefix);
 
         ListFile file = new ListFile("plugins" + File.separator + "CommandsForSale" + File.separator + "Players"
@@ -180,10 +186,13 @@ public class GUIConstructor implements CommandExecutor{
             // lores of 5 is the command name
             String rawLore = is.getItemMeta().getLore().get(0);
             String [] lores = rawLore.split(" ");
-            if(!bought.contains(lores[5].toLowerCase())){
-                String perm = config.getString("CommandOptions."+ lores[5] + ".permission");
+            System.out.println("LORE NAME: " + lores[5]);
+            if(!bought.contains(lores[5].toLowerCase())) {
+                System.out.println("HAS NOT BOUGHT: " + lores[5]);
+                String perm = config.getString("CommandOptions." + lores[5] + ".permission");
                 if ((perm.equalsIgnoreCase("void") || player.hasPermission(perm))) {
-                    iv.addItem(is);
+                    System.out.println("HAS PERM: " + lores[5]);
+                    System.out.println(iv.addItem(is));
                     pos++;
                 }
             }
@@ -192,6 +201,12 @@ public class GUIConstructor implements CommandExecutor{
                 break;
             }
         }//end of loop through icons
+        for(ItemStack is: iv.getContents())
+            if(is != null) {
+                System.out.println(is.toString());
+            }
+
+        System.out.println("");
         return iv;
     }
 

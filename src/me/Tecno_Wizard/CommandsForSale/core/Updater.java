@@ -643,6 +643,7 @@ public class Updater {
          * @return true if Updater should consider the remote version an update, false if not.
          */
     public boolean shouldUpdate(String localVersion, String remoteVersion) {
+        System.out.println("LOCAL: " + localVersion + ", REMOTE: " + remoteVersion);
         return !localVersion.equalsIgnoreCase(remoteVersion);
     }
 
