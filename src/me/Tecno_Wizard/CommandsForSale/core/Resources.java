@@ -4,6 +4,7 @@ import com.skionz.dataapi.DataFile;
 import com.skionz.dataapi.ListFile;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -102,7 +103,7 @@ public class Resources {
         return cmds.keySet();
     }
 
-    public ListFile getPlayerFile(Player player){
+    public ListFile getPlayerFile(OfflinePlayer player){
         return new ListFile("plugins/CommandsForSale/Players/" + player.getUniqueId(), "txt");
     }
 

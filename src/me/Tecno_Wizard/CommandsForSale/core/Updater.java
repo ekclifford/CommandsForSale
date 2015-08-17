@@ -643,7 +643,8 @@ public class Updater {
          * @return true if Updater should consider the remote version an update, false if not.
          */
     public boolean shouldUpdate(String localVersion, String remoteVersion) {
-        System.out.println("LOCAL: " + localVersion + ", REMOTE: " + remoteVersion);
+        // DEBUG
+        // System.out.println("LOCAL: " + localVersion + ", REMOTE: " + remoteVersion);
         return !localVersion.equalsIgnoreCase(remoteVersion);
     }
 
@@ -757,14 +758,19 @@ public class Updater {
 
     private void runUpdater() {
         if (this.url != null && (this.read() && this.versionCheck())) {
+            //DEBUG
+            // System.out.println("Version outdated");
             // Obtain the results of the project's file feed
             if ((this.versionLink != null) && (this.type != UpdateType.NO_DOWNLOAD)) {
+                //DEBUG
+                // System.out.println("Version link and type good. Begin");
                 String name = this.file.getName();
                 // If it's a zip file, it shouldn't be downloaded as the plugin's name
                 if (this.versionLink.endsWith(".zip")) {
                     name = this.versionLink.substring(this.versionLink.lastIndexOf("/") + 1);
                 }
                 this.saveFile(name);
+                result = UpdateResult.SUCCESS;
             }
         }
 

@@ -62,9 +62,9 @@ public class Main extends JavaPlugin {
 		startPluginMetrics();
 		registerListeners();
 		registerCmds();
-        writeReadMeFiles();
-		runUpdaterService();
         callback = new UpdateScheduler(this);
+        writeReadMeFiles();
+        runUpdaterService();
 
 		// final operations
 		resources.logString("The plugin was enabled.");
@@ -305,7 +305,8 @@ public class Main extends JavaPlugin {
         final Updater.UpdateType type;
         if (getConfig().getBoolean("UpdaterOn")) {
             if (getConfig().getBoolean("AutomaticallyUpdate", true)) {
-                type = Updater.UpdateType.DEFAULT;
+                // System.out.println("Updater started");
+                type = UpdateType.DEFAULT;
             } else {
                 type = UpdateType.NO_DOWNLOAD;
             }

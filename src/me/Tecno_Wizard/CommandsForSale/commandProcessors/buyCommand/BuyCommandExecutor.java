@@ -16,7 +16,7 @@ import com.skionz.dataapi.ListFile;
 public class BuyCommandExecutor {
     private static Main main;
     private static Economy econ;
-    private static final String META_KEY_CMD = "CommandToBuy";
+    public static final String META_KEY_CMD = "CommandToBuy";
     private static String pluginPrefix;
 
     public BuyCommandExecutor(Main main) {
@@ -27,7 +27,7 @@ public class BuyCommandExecutor {
 
     public BuyCommandResponse perform(Player sender, String[] args, boolean isGUI){
         args[0] = args[0].toLowerCase();
-        System.out.println(MetaUtils.getMetadataValueAsString(sender, META_KEY_CMD));
+        // System.out.println(MetaUtils.getMetadataValueAsString(sender, META_KEY_CMD));
         if(!MetaUtils.hasMetadata(sender, META_KEY_CMD)) {
             if(main.getResources().getCmds().contains(args[0].toLowerCase())) {
                 ListFile file = main.getResources().getPlayerPermanentFile(sender.getUniqueId().toString());

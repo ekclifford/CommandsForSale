@@ -10,52 +10,42 @@ import org.bukkit.inventory.ItemStack;
  *
  */
 public class ItemstackConverter {
+    private static String[] illegals = {"AIR", "WATER", "STATIONARY_WATER", "LAVA", "STATIONARY_LAVA", "BED_BLOCK", "PISTON_EXTENSION", "PISTON_MOVING_PIECE",
+            "DOUBLE_STEP", "FIRE", "REDSTONE_WIRE", "CROPS", "SIGN_POST", "WOODEN_DOOR", "WALL_SIGN", "IRON_DOOR_BLOCK", "GLOWING_REDSTONE_ORE",
+            "REDSTONE_TORCH_OFF", "SUGAR_CANE_BLOCK", "PORTAL", "CAKE_BLOCK", "DIODE_BLOCK_OFF", "DIODE_BLOCK_ON", "PUMPKIN_STEM",
+            "MELON_STEM", "NETHER_WARTS", "BREWING_STAND", "CAULDRON", "ENDER_PORTAL", "REDSTONE_LAMP_ON", "WOOD_DOUBLE_STEP", "COCOA",
+            "TRIPWIRE", "FLOWER_POT", "CARROT", "POTATO", "SKULL", "REDSTONE_COMPARATOR_OFF", "REDSTONE_COMPARATOR_ON", "STANDING_BANNER",
+            "WALL_BANNER", "DAYLIGHT_DETECTOR_INVERTED", "DOUBLE_STONE_SLAB2", "SPRUCE_DOOR", "BIRCH_DOOR", "JUNGLE_DOOR",
+            "ACACIA_DOOR", "DARK_OAK_DOOR"};
 
-    public static ItemStack getItemstackFromCode(String input) {
+    public static ItemStack getItemstackFromString(String input) {
         try {
-            return new ItemStack(Material.valueOf(input), 1);
-        } catch (IllegalArgumentException e){
+            // System.out.println(input + ": " + isLegal(input));
+            if (isLegal(input)) {
+                return new ItemStack(Material.valueOf(input), 1);
+            } else Bukkit.getConsoleSender().sendMessage(ChatColor.RED
+                    + "[CommandsForSale] Error: could not parse item entry \"" + input + "\". It does not match any existing materials. Double check the material list. " +
+                    "Replaced with fermented spider eye.");
+        } catch (IllegalArgumentException e) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED
-                    + "[CommandsForSale] Error: could not parse item entry \"" + input + "\". It does not match any existing materials." +
-                    "The list of correct values depends on your craftbukkit/spigot version, and can be found by googling \"" +
-                    "bukkit materials 'your version number'. They are case sensitive! You have been given a spider eye.");
-            return new ItemStack(Material.FERMENTED_SPIDER_EYE, 1);
-        }
-        catch (NullPointerException e){
+                    + "[CommandsForSale] Error: could not parse item entry \"" + input + "\". It does not match any existing materials. Double check the material list. " +
+                    "Replaced with fermented spider eye.");
+        } catch (NullPointerException e) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED
-                    + "[CommandsForSale] Error: could not parse item entry \"" + input + "\". It does not match any existing materials." +
-                    "The list of correct values depends on your craftbukkit/spigot version, and can be found by googling \"" +
-                    "bukkit materials 'your version number'. They are case sensitive! You have been given a spider eye.");
-            return new ItemStack(Material.FERMENTED_SPIDER_EYE, 1);
+                    + "[CommandsForSale] Error: could not parse item entry \"" + input + "\". It does not match any existing materials. Double check the material list. " +
+                    "Replaced with fermented spider eye.");
         }
+        return new ItemStack(Material.FERMENTED_SPIDER_EYE, 1);
     }
 
-
-    // I started on this and didn't want to waste it, but it was dumb.
-//    public static ItemStack getItemstackFromCode(String input){
-//        switch(input){
-//            //compass
-//            case "1": return new ItemStack(Material.COMPASS, 1);
-//            //clock
-//            case "2": return new ItemStack(Material.WATCH, 1);
-//            //nametag
-//            case "3": return new ItemStack(Material.NAME_TAG, 1);
-//            //feather
-//            case "4": return new ItemStack(Material.FEATHER, 1);
-//            //various mineables
-//            case "5.1": return new ItemStack(Material.GOLD_INGOT, 1);
-//            case "5.2": return new ItemStack(Material.DIAMOND, 1);
-//            case "5.3": return new ItemStack(Material.REDSTONE, 1);
-//            case "5.4": return new ItemStack(Material.IRON_INGOT, 1);
-//            case "5.5": return new ItemStack(Material.EMERALD, 1);
-//            //music disk
-//            case "6": return new ItemStack(Material.RECORD_10, 1);
-//            //potion
-//            case "7": return new ItemStack(Material.POTION, 1);
-//            //slimeball
-//            case "8": return new ItemStack(Material.SLIME_BALL,1);
-//            //fishing rod
-//            case "9": return new ItemStack(Material.FISHING_ROD, 1);
-//        }
-//    }
+    private static boolean isLegal(String input) {
+        boolean isLegal = true;
+        for (String value : illegals) {
+            if (value.equalsIgnoreCase(input)) {
+                isLegal = false;
+                break;
+            }
+        }
+        return isLegal;
+    }
 }

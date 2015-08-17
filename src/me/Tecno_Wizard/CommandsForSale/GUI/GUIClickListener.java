@@ -85,7 +85,6 @@ public class GUIClickListener implements Listener {
                     else if(ChatColor.stripColor(meta.getDisplayName()).equalsIgnoreCase("One Use Pass")) {
                         String command = MetaUtils.getMetadataValueAsString(player, META_KEY_CMD);
                         buyOnceExecutor.execute(player, new String[]{command});
-                        player.removeMetadata(META_KEY_CMD, main);
                     }
 				}
 			} catch (Exception error){}

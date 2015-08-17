@@ -102,7 +102,7 @@ public class BoughtCmdsExecutor implements CommandExecutor {
 				if (target.hasPlayedBefore()) {
 					StringBuilder sb = new StringBuilder();
 					// gets the list of player's commands
-					ArrayList<String> boughtCmds = main.getResources().getPlayerFile((Player) sender).read();
+					ArrayList<String> boughtCmds = main.getResources().getPlayerFile(target).read();
 
 					sb.append(String.format("[%s] You have purchased- ",
 							pluginPrefix));
