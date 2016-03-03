@@ -104,7 +104,6 @@ public class Main extends JavaPlugin {
 		// these 2 values are set to comply with the Curse rules, or i'd have
 		// them always on (sorry)
 		getConfig().addDefault("UpdaterOn", true);
-		getConfig().addDefault("AutomaticallyUpdate", false);
         getConfig().addDefault("TimeBetweenUpdateChecksInMins", 360);
 		getConfig().addDefault("CurrencyPlural", "void");
         getConfig().addDefault("Messages.hasNotBoughtCmd", "&4You have not bought &e/{COMMANDNAME}&4. &e/buycmd &4to buy, if permissible.");
@@ -305,12 +304,8 @@ public class Main extends JavaPlugin {
     protected void runUpdaterService() {
         final Updater.UpdateType type;
         if (getConfig().getBoolean("UpdaterOn")) {
-            if (getConfig().getBoolean("AutomaticallyUpdate", true)) {
-                // System.out.println("Updater started");
-                type = UpdateType.DEFAULT;
-            } else {
-                type = UpdateType.NO_DOWNLOAD;
-            }
+			type = UpdateType.NO_DOWNLOAD;
+
             getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
                 @Override
                 public void run() {
