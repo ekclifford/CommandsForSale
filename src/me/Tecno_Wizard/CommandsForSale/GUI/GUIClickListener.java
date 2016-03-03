@@ -62,7 +62,7 @@ public class GUIClickListener implements Listener {
                         Command cmd = main.getResources().getCommand(command.toLowerCase());
                         int type = cmd.canBeOneTimeUsed()? 1 : 0;
 
-						BukkitTask task = new SwitchInventoryRunnable(player, purchaseReadyToConfirm, type).runTaskLater(main, 1);
+						BukkitTask task = new SwitchInventoryRunnable(player, purchaseReadyToConfirm, type, main).runTaskLater(main, 1);
 						return;
 					}
 					// end of if starts with /
@@ -70,14 +70,14 @@ public class GUIClickListener implements Listener {
 					// if is purchase confirm
 					if(ChatColor.stripColor(meta.getDisplayName()).equalsIgnoreCase("Confirm Purchase")){
 						buyCmdCont.preformConfirm(player, new String[0]);
-						BukkitTask task = new SwitchInventoryRunnable(player, false, 0).runTaskLater(main, 1);
+						BukkitTask task = new SwitchInventoryRunnable(player, false, 0, main).runTaskLater(main, 1);
 						
 					}
 					
 					// if is purchase deny
 					else if (ChatColor.stripColor(meta.getDisplayName()).equalsIgnoreCase("Deny Purchase")) {
 						buyCmdCont.preformDeny(player, new String[0]);
-						BukkitTask task = new SwitchInventoryRunnable(player, false, 0).runTaskLater(main, 1);
+						BukkitTask task = new SwitchInventoryRunnable(player, false, 0, main).runTaskLater(main, 1);
 					}
 
                     // if it is buying a pass
