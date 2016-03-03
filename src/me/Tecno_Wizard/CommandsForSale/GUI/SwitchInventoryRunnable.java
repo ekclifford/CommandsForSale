@@ -54,7 +54,7 @@ public class SwitchInventoryRunnable extends BukkitRunnable {
                 meta.setLore(lore);
                 icon.setItemMeta(meta);
                 inv.setItem(6, icon);
-                player.openInventory(GUIConstructor.getConfirmPageWPass());
+                player.openInventory(inv);
             } else {
                 player.openInventory(GUIConstructor.getConfirmPageWOPass());
             }
