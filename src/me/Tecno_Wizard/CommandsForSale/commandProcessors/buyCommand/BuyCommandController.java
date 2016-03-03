@@ -130,8 +130,10 @@ public class BuyCommandController implements CommandExecutor {
 									META_KEY_CMD)));
 					// meta is not removed in the perform for printout
 					player.removeMetadata(META_KEY_CMD, main);
-					((Player) sender).playSound(((Player) sender).getLocation(),
-							Sound.CHICKEN_EGG_POP, 1, 5);
+					/* ((Player) sender).playSound(((Player) sender).getLocation(),
+							Sound.CHICKEN_EGG_POP, 1, 5); */
+
+					// above is breaking in 1.9. Will wait until 1.9 becomes standard to make breaking for 1.8 and below
 					break;
 				case FAIL_NOT_AWAITING_RESPONSE:
 					player.sendMessage(String.format("%s[%s] You are not trying to purchase any command",

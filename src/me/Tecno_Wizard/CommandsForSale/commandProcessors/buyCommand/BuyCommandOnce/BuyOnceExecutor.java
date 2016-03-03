@@ -99,8 +99,10 @@ public class BuyOnceExecutor implements CommandExecutor{
 
     private void givePass(String cmd, CommandSender sender) {
         Resources.sendMessage("You bought one pass!", sender, ChatColor.GREEN);
-        ((Player) sender).playSound(((Player) sender).getLocation(),
-                Sound.CHICKEN_EGG_POP, 1, 5);
+        /* ((Player) sender).playSound(((Player) sender).getLocation(),
+                Sound.CHICKEN_EGG_POP, 1, 5); */
+
+        // 1.9 breaking. Will wait until 1.9 is standard to break 1.8
         DataFile playerFile = main.getResources().getPlayerPassFile((Player)sender);
         if(!playerFile.isInt(cmd)){
             playerFile.set(cmd, 0);
