@@ -3,6 +3,7 @@ package me.Tecno_Wizard.CommandsForSale.GUI;
 import me.Tecno_Wizard.CommandsForSale.commandProcessors.buyCommand.MetaUtils;
 import me.Tecno_Wizard.CommandsForSale.core.Main;
 import me.Tecno_Wizard.CommandsForSale.core.Resources;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -39,23 +40,25 @@ public class SwitchInventoryRunnable extends BukkitRunnable {
             if (type == 1) {
                 // get confirm menu
                 Inventory inv = GUIConstructor.getConfirmPageWPass();
+                Inventory invToSend = Bukkit.createInventory(null, inv.getSize(), inv.getTitle());
+                invToSend.setContents(inv.getContents());
                 // get command name and get Command object
                 String cmdName = MetaUtils.getMetadataValueAsString(player, META_KEY_CMD);
                 // get price
                 double price = main.getResources().getCommand(cmdName).getSinglePrice();
                 // item 6 is the pass icon (Really should have made a dict for that.. Little late now)
-                ItemStack icon = inv.getItem(6).clone(); 
+                ItemStack icon = invToSend.getItem(6).clone();
                 ItemMeta meta = icon.getItemMeta();
 
                 // all of the following is necessary to prevent alias modification. Cloned objects, ugh why.
                 
                 List<String> lore = meta.getLore();
                 String currency = main.getResources().getCurrencyPlural();
-                lore.set(0, lore.get(0) + price + " " + currency);
+                lore.set(0, String.format("%s %s %s", lore.get(0), price, currency));
                 meta.setLore(lore);
                 icon.setItemMeta(meta);
-                inv.setItem(6, icon);
-                player.openInventory(inv);
+                invToSend.setItem(6, icon);
+                player.openInventory(invToSend);
             } else {
                 player.openInventory(GUIConstructor.getConfirmPageWOPass());
             }
