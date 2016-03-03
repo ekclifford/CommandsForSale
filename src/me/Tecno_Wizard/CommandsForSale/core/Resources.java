@@ -21,17 +21,21 @@ import java.util.Set;
 public class Resources {
     private static String pluginPrefix;
     private static String currencyPlural;
+    private static String blockedCmdMessage;
     private static HashMap<String, Command> cmds = new HashMap<>();
     private static ListFile purchaseLog;
 
     private boolean displayVerisonInfo;
     private String versionInformation =
-            ChatColor.AQUA + "[CommandsForSale] Welcome to CommandsForSale Version 1.2.4!\n" +
-                    "Enhanced updater to run at scheduled intervals.\nFixed /help commandsforsale's menu.";
+            ChatColor.AQUA + "[CommandsForSale] Welcome to CommandsForSale Version 1.2.6!\n" +
+                    "Configurable block message as requested by FearlessBeta (Spigot). The old message was WAY too long.";
+
+
     Resources(Main main) {
         FileConfiguration config = main.getConfig();
         currencyPlural = config.getString("CurrencyPlural");
         pluginPrefix = config.getString("PluginPrefix");
+        blockedCmdMessage  = config.getString("Messages.hasNotBoughtCmd");
 
         for (String cmd : main.getConfig().getStringList("MainCommands")) {
             // get values
@@ -163,5 +167,13 @@ public class Resources {
         recipient.sendMessage(String.format("%s[%s] %s", startColor, pluginPrefix, msg));
     }
 
+
+    public static String getBlockedCmdMessage() {
+        return blockedCmdMessage;
+    }
+
+    public boolean isDisplayVerisonInfo() {
+        return displayVerisonInfo;
+    }
 }
 

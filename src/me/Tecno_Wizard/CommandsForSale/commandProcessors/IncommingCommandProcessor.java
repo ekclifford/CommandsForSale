@@ -50,10 +50,8 @@ public class IncommingCommandProcessor implements Listener {
                         //TODO log use of pass
                     } else {
                         e.getPlayer().sendMessage(
-                                String.format("%s[%s] %s%s %sor its main command such as /balance to /bal must be purchased before it can be used.\n" +
-                                                "Use /buyonce <Command Name> to buy a pass to use once, if it is unlocked to do so.",
-                                        ChatColor.RED, main.getResources().getPluginPrefix(), ChatColor.GOLD,
-                                        args[0], ChatColor.RED));
+                                ChatColor.translateAlternateColorCodes('&', String.format("%s[%s] %s",
+                                        ChatColor.RED, main.getResources().getPluginPrefix(), Resources.getBlockedCmdMessage().replace("{COMMANDNAME}", args[0]))));
                         e.setCancelled(true);
                     }
                 }

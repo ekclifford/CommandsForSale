@@ -107,6 +107,7 @@ public class Main extends JavaPlugin {
 		getConfig().addDefault("AutomaticallyUpdate", false);
         getConfig().addDefault("TimeBetweenUpdateChecksInMins", 360);
 		getConfig().addDefault("CurrencyPlural", "void");
+        getConfig().addDefault("Messages.hasNotBoughtCmd", "&4You have not bought &e/{COMMANDNAME}&4. &e/buycmd &4to buy, if permissible.");
 		
 		// other values
 		getConfig().addDefault("PluginPrefix", "CommandsForSale");
@@ -187,7 +188,7 @@ public class Main extends JavaPlugin {
 					+ "form under the config section! Just Google bukkit commandsforsale or search for it in BukkitDev\n"
 					+ "[CommandsForSale] ENJOY IT!");
 			save.set("NumberOfTimesRan", 1);
-			save.set("V1.2.4HasRan", false);
+			save.set("V1.2.6HasRan", false);
 			save.save();
 
 		} else {
@@ -196,11 +197,11 @@ public class Main extends JavaPlugin {
 			save.save();
 		}
 
-		Boolean hasRunVersion = save.getBoolean("V1.2.4HasRan");
+		Boolean hasRunVersion = save.getBoolean("V1.2.6HasRan");
 		if(hasRunVersion == null)
 			hasRunVersion = false;
 		resources.setDisplayVerisonInfo(!hasRunVersion);
-		save.set("V1.2.4HasRan", true);
+		save.set("V1.2.6HasRan", true);
 
 		// feedback message (I like feedback)
 		if (save.getInt("NumberOfTimesRan") == 5
