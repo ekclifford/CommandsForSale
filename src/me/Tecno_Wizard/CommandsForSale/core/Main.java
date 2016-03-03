@@ -187,7 +187,7 @@ public class Main extends JavaPlugin {
 					+ "form under the config section! Just Google bukkit commandsforsale or search for it in BukkitDev\n"
 					+ "[CommandsForSale] ENJOY IT!");
 			save.set("NumberOfTimesRan", 1);
-			save.set("V1.2.6HasRan", false);
+			save.set(String.format("V%sHasRan", this.getDescription().getVersion()), false);
 			save.save();
 
 		} else {
