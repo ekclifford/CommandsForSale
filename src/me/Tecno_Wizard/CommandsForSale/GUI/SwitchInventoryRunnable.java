@@ -44,10 +44,11 @@ public class SwitchInventoryRunnable extends BukkitRunnable {
                 // get price
                 double price = main.getResources().getCommand(cmdName).getSinglePrice();
                 // item 6 is the pass icon (Really should have made a dict for that.. Little late now)
-                ItemMeta meta = inv.getItem(6).getItemMeta();
+                ItemStack icon = inv.getItem(6).clone(); 
+                ItemMeta meta = icon.getItemMeta();
 
                 // all of the following is necessary to prevent alias modification. Cloned objects, ugh why.
-                ItemStack icon = inv.getItem(6).clone();
+                
                 List<String> lore = meta.getLore();
                 String currency = main.getResources().getCurrencyPlural();
                 lore.set(0, lore.get(0) + price + " " + currency);
