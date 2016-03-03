@@ -196,11 +196,11 @@ public class Main extends JavaPlugin {
 			save.save();
 		}
 
-		Boolean hasRunVersion = save.getBoolean("V1.2.6HasRan");
+		Boolean hasRunVersion = save.getBoolean(String.format("V%sHasRan", this.getDescription().getVersion()));
 		if(hasRunVersion == null)
 			hasRunVersion = false;
 		resources.setDisplayVerisonInfo(!hasRunVersion);
-		save.set("V1.2.6HasRan", true);
+		save.set(String.format("V%sHasRan", this.getDescription().getVersion()), true);
 
 		// feedback message (I like feedback)
 		if (save.getInt("NumberOfTimesRan") == 5
