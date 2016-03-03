@@ -27,8 +27,8 @@ public class Resources {
 
     private boolean displayVerisonInfo;
     private String versionInformation =
-            ChatColor.AQUA + "[CommandsForSale] Welcome to CommandsForSale Version 1.2.6!\n" +
-                    "Configurable block message as requested by FearlessBeta (Spigot). The old message was WAY too long.";
+            ChatColor.AQUA + "[CommandsForSale] Welcome to CommandsForSale Version 1.2.7!\n" +
+                    "Broke annoying auto updater forever, 1.9 compatibility, added one time use price in GUI";
 
 
     Resources(Main main) {

@@ -1,7 +1,8 @@
 name: CommandsForSale
 description: 'Allows the purchasing and protecting of commands'
-version: 1.2.5
-author: 'Many thanks to Tecno_Wizard, new Owner ekclifford'
+version: 1.2.7
+#author: 'Many thanks to Tecno_Wizard, new Owner ekclifford' Figured the below is better
+author: 'Many thanks to Tecno_Wizard, new Author ekclifford'
 main: me.Tecno_Wizard.CommandsForSale.core.Main
 commands:
   buycmd:
